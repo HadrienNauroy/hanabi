@@ -3,7 +3,7 @@ Artificial Intelligence to play Hanabi.
 """
 
 import itertools
-from random import *
+
 
 class AI:
     """
@@ -135,48 +135,3 @@ class Cheater(AI):
         print('Cheater is doomed and must discard:', act, myprecious)
         return act
 
-
-
-
-class hadrien(AI):
-    """ 
-    let's start with a simple AI
-
-    Algorithm : 
-        *play a random card
-    """
-
-    def play(self): 
-        game = self.game
-        a=randint(0,4)
-        return"p%d"%a
-
-"""It seems like it's working"""
-
-class hadrien_2(AI):
-    """
-    let's do something better
-
-    Algorithm: 
-        *if we got two clue on a card play it
-        *if blue_coin>0 give cW clue 
-        *if blue_coin<0 discard a card
-
-    """
-
-    def play(self):
-        game=self.game
-
-
-        for k in range(5):
-            if game.current_hand.cards[k].color_clue and game.current_hand.cards[k].number_clue :
-                return"p%d"%k+1 #retour à des indices rééls !
-
-
-        if game.blue_coins > 0:
-            return"cW"
-
-        if game.blue_coins==0 :
-            return"d1"
-
-"""it seems ok too but not really efficient"""
