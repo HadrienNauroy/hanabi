@@ -138,7 +138,7 @@ class Cheater(AI):
 
 
 
-class hadrien(AI):
+class stupid_ai(AI):
     """ 
     let's start with a simple AI
 
@@ -153,7 +153,7 @@ class hadrien(AI):
 
 """It seems like it's working"""
 
-class hadrien_2(AI):
+class basic_ai(AI):
     """
     let's do something better
 
@@ -180,3 +180,52 @@ class hadrien_2(AI):
             return"d1"
 
 """it seems ok too but not really efficient"""
+
+class smarter_ai(AI):
+    """
+    let's do something better
+
+    Algorithm: 
+        *if we got two clue on a card and the card is playable play it
+        *if we got two clue on a card and the card is disacrdable : discard it
+        *if blue_coin>0 give a new clue 
+        *else discard a random card 
+
+    """
+    def play(self):
+        game=self.game
+
+        for k in range(5):
+            if game.current_hand.cards[k].color_clue and game.current_hand.cards[k].number_clue :
+                if game.piles[game.current_hand.cards[k].color]+1 == game.current_hand.cards[k].number :
+                    return"p%d"%(k+1) #retour à des indices rééls !
+                if game.piles[game.current_hand.cards[k].color] >= game.current_hand.cards[k].number :
+                    return"d%d"%(k+1) #idem
+
+        if game.blue_coins > 0 : 
+            I_see = [ card for card in self.other_players_cards]
+            print(I_see)
+            for c in I_see :
+                #print(c.color)
+                   
+                if  not c.color_clue:
+                    clue = "c%s"%c.color
+                    clue = clue[:2] # quick fix, with 3+ players, can't clue cRed anymore, only cR
+                    return clue
+                if not c.number_clue:
+                    return"c%d"%c.number
+
+        else :
+            return"d1"
+
+"""it seems ok too but not really efficient : average score is 2 """
+
+
+
+
+
+
+
+
+
+
