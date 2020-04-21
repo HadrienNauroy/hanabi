@@ -148,7 +148,7 @@ class stupid_ai(AI):
 
     def play(self): 
         game = self.game
-        a=randint(0,4)
+        a=randint(1,5)
         return"p%d"%a
 
 """It seems like it's working"""
