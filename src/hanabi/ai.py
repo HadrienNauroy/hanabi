@@ -139,14 +139,14 @@ class Cheater(AI):
 
 
 class stupid_ai(AI):
-    """ 
+    """
     let's start with a simple AI
 
-    Algorithm : 
+    Algorithm :
         *play a random card
     """
 
-    def play(self): 
+    def play(self):
         game = self.game
         a=randint(1,5)
         return"p%d"%a
@@ -157,9 +157,9 @@ class basic_ai(AI):
     """
     let's do something better
 
-    Algorithm: 
+    Algorithm:
         *if we got two clue on a card play it
-        *if blue_coin>0 give cW clue 
+        *if blue_coin>0 give cW clue
         *if blue_coin<0 discard a card
 
     """
@@ -185,11 +185,11 @@ class smarter_ai(AI):
     """
     let's do something better
 
-    Algorithm: 
+    Algorithm:
         *if we got two clue on a card and the card is playable play it
         *if we got two clue on a card and the card is disacrdable : discard it
-        *if blue_coin>0 give a new clue 
-        *else discard a random card 
+        *if blue_coin>0 give a new clue
+        *else discard a random card
 
     """
     def play(self):
@@ -202,12 +202,12 @@ class smarter_ai(AI):
                 if game.piles[game.current_hand.cards[k].color] >= game.current_hand.cards[k].number :
                     return"d%d"%(k+1) #idem
 
-        if game.blue_coins > 0 : 
+        if game.blue_coins > 0 :
             I_see = [ card for card in self.other_players_cards]
             print(I_see)
             for c in I_see :
                 #print(c.color)
-                   
+
                 if  not c.color_clue:
                     clue = "c%s"%c.color
                     clue = clue[:2] # quick fix, with 3+ players, can't clue cRed anymore, only cR
@@ -219,13 +219,5 @@ class smarter_ai(AI):
             return"d1"
 
 """it seems ok too but not really efficient : average score is 2 """
-
-
-
-
-
-
-
-
-
-
+""" ah nan so sad"""
+""" stp commit"""
