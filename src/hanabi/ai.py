@@ -220,3 +220,4 @@ class smarter_ai(AI):
 
 """it seems ok too but not really efficient : average score is 2 """
 """ ah nan so sad"""
+""" stp commit"""
