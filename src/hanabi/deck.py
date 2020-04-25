@@ -88,6 +88,7 @@ class Hand:
     Also used for the discard pile.
     """
     def __init__(self, deck, n=5):
+    def __init__(self, deck, n=4):
         # TODO: see if it's easier to derive from list
         self.cards = []
         for i in range(n):
