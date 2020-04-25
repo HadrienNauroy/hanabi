@@ -87,13 +87,13 @@ class Hand:
     """A Hanabi hand, with n cards, drawn from the deck.
     Also used for the discard pile.
     """
-    def __init__(self, deck, n=5):
+    def __init__(self, deck, n=4):
         # TODO: see if it's easier to derive from list
         self.cards = []
         for i in range(n):
             self.cards.append(deck.draw())
         self._deck = deck  # not sure if I need it
-        self.recomendation =["x1"] #la première recommendation n en est pas une !
+        self.recommendation =["x1"] #la première recommendation n en est pas une !
 
     def __str__(self):
         return " ".join([c.str_color() for c in self.cards])
@@ -284,6 +284,8 @@ class Game:
                 if choice.strip() == '':
                     continue
             elif isinstance(_choice, ai.AI):
+                # fixme: duck-typing seems more natural to students, as in
+                #     try: _choice.play() except AttributeError ...
                 choice = _choice.play()
             elif isinstance(_choice, str):
                 choice = _choice
@@ -372,6 +374,12 @@ class Game:
         clue[0] is within (12345RBGWY).
         By default, the clue is given to the next player (backwards compatibility with 2 payers games).
         If clue[1] is given it is the initial (ABCDE) or index (1234) of the target player.
+
+        Example::
+
+           hanabi> cWB    # is a white clue to Benji
+           hanabi> c1     # is a 1 clue to next player
+           hanabi> cRed   # is interpreted as a Red clue to Elric, probably not what you expected!
         """
 
         hint = clue[0].upper()  # so cr is valid to clue Red
@@ -388,18 +396,24 @@ class Game:
             target_index = 1
         target_index = int(target_index)
         if target_index == 0:
+            self.add_blue_coin()  # put back the blue coin
             raise ValueError("Cannot give a clue to yourself.")
 
         target_name = self.players[target_index]
 
         self.log(self.current_player_name, "gives a clue", hint, "to", target_name)
         #  player = clue[1]  # if >=3 players
+        targetted_card = False
         for card in self.hands[target_index].cards:
             if hint in str(card):
+                targetted_card = True
                 if hint in "12345":
                     card.number_clue = hint
                 else:
                     card.color_clue = hint
+        if not targetted_card:
+            self.add_blue_coin()  # put back the blue coin
+            raise ValueError("This clue is not valid (it matches no card in the target hand)")
         self.next_player()
 
     def examine_piles(self, *unused):
@@ -454,6 +468,8 @@ class Game:
 
     @property
     def score(self):
+        if self.red_coins >= 3:
+            return 0
         return sum(self.piles.values())
 
     def run(self):
@@ -494,6 +510,7 @@ moves = %r
      self.starting_deck,
      self.moves))
         # fixme: seems that a deck's repr is its list of cards?
+        f.close()
 
     def load(self, filename):
         """Load a saved game, replay the moves.

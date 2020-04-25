@@ -45,11 +45,11 @@ class Cheater(AI):
         if playable:
             # sort by ascending number, then newest
             playable.sort(key=lambda p: (p[1], -p[0]))
-            print('Cheater would play:', "p%d"%playable[0][0], end=' ')
+            game.log('Cheater would play:', "p%d"%playable[0][0], end=' ')
             if (len(playable) > 1):
-                print('but could also pick:', playable[1:])
+                game.log('but could also pick:', playable[1:])
             else:
-                print()
+                game.log()
 
             return "p%d"%playable[0][0]
 
@@ -64,7 +64,7 @@ class Cheater(AI):
         # fixme: il me manque les cartes sup d'une pile morte
 
         if discardable and (game.blue_coins < 8):
-            print('Cheater would discard:', "d%d"%discardable[0], discardable)
+            game.log('Cheater would discard:', "d%d"%discardable[0], discardable)
             return "d%d"%discardable[0]
 
         ## 2nd type of discard: I have a card, and my partner too
@@ -73,7 +73,7 @@ class Cheater(AI):
                          if card in self.other_players_cards
                        ]
         if discardable2 and (game.blue_coins < 8):
-            print('Cheater would discard2:', "d%d"%discardable2[0], discardable2)
+            game.log('Cheater would discard2:', "d%d"%discardable2[0], discardable2)
             return "d%d"%discardable2[0]
 
 
@@ -83,12 +83,13 @@ class Cheater(AI):
                      if (1+game.discard_pile.cards.count(card))
                          == game.deck.card_count[card.number]
                    ]
+        precious = []  # FIXME : temporarily disable this feature, it doesn't work for 3+ players (save clue is given to the wrong player)
         if precious:
             clue = False
-            # this loop is such that we prefer to clue an card close to chop
-            # would be nice to clue an unclued first, instead of a already clued
+            # this loop is such that we prefer to clue a card close to chop
+            # would be nice to clue an unclued first, instead of an already clued
             for p in precious:
-                # print(p, p.number_clue, p.color_clue)
+                # game.log(p, p.number_clue, p.color_clue)
                 if p.number_clue is False:
                     clue = "c%d"%p.number
                     break
@@ -99,18 +100,18 @@ class Cheater(AI):
                 # this one was tricky:
                 # don't want to give twice the same clue
             if clue:
-                print('Cheater would clue a precious:',
+                game.log('Cheater would clue a precious:',
                        clue, precious)
                 if game.blue_coins > 0:
                     return clue
-                print("... but there's no blue coin left!")
+                game.log("... but there's no blue coin left!")
 
 
         # if reach here, can't play, can't discard safely, no card to clue-save
         # Let's give a random clue, to see if partner can unblock me
-        if game.blue_coins > 0:
-            print('Cheater would clue randomly: cW')
-            return 'cw'
+        if game.blue_coins >0:
+            game.log ('Cheater would clue randomly:')
+            return 'c'+random.choice('12345RGBWY')
 
         # If reach here, can't play, can't discard safely
         # No blue-coin left.
@@ -124,7 +125,7 @@ class Cheater(AI):
         mynotprecious.sort(key=lambda p: (-p[0], p[1]))
         if mynotprecious:
             act = 'd%d'%mynotprecious[0][1]
-            print('Cheater is trapped and must discard:', act, mynotprecious)
+            game.log('Cheater is trapped and must discard:', act, mynotprecious)
             return act
 
         # Oh boy, not even a safe discard, this is gonna hurt!
@@ -132,7 +133,7 @@ class Cheater(AI):
         myprecious = [ (card.number, i+1) for (i, card) in enumerate(game.current_hand.cards) ]
         myprecious.sort(key=lambda p: (-p[0], p[1]))
         act = 'd%d'%myprecious[0][1]
-        print('Cheater is doomed and must discard:', act, myprecious)
+        game.log('Cheater is doomed and must discard:', act, myprecious)
         return act
 
 
@@ -238,29 +239,75 @@ class Strat1_ai(AI):
     5) Discard card c1
 
     """
-
+    nb_cards= 4
+    nb_players = 4
     actions=[]  #liste des actions jouées pendant la partie la derniere action vient en premier
                      #variable de classe mise à jour à chaque utilisation de play
                      #on saura ce que les autres ont fait avant
                      #liste de chaines de carctères
 
+    def C_i(self, L , playable):
+        #on joue le 5 playable du plus petit indice en premier
+        for k in range(len(L)):
+            if L[k].number == 5 and L[k] in playable:
+                return(k)
+
+        #si pas de 5 on met le plus petit numéro playable de plus petit indice
+        m = 6, l = len(L)+1
+        for k in range(len(L)):
+            if L[k] in playable and L[k]number <m:
+                m = L[k].number
+                l = k
+        if m!=6 and l != len(L)+1:
+            return(k)
+
+        #si y'a une dead card (déjà jouée), on a discard celle de plus petit indice
+        for k in range(len(L)):
+            if L[k] in self.piles():
+                return(4+k)
+
+        #on discard la carte de plus haut numéro de plus petit indice et non indispensable
+        m=0, l =len(L)+1:
+        for k in range(4):
+            if(L[k] in self.decks or L[k] in self.other_players_cards) and (L[k].number>m):
+                m = L[k].number
+                l = k
+        if m!= 0 and l!= len(L)+1:
+            return(k+4)
+
+        #On discard c1
+        return(4)
 
     def from_clue_to_play(self):
         '''
         la fonction est lancée au moment où le joueur donne l'indice.
-        elle doit mettre à jour hand.recomendation pour tous les autres joueurs cad traduire l'indice pour chaque joueur
-        FIXME : il faut se mettre a la place de chaque joueurs. 
-        ''' 
+        elle doit mettre à jour hand.recommendation pour tous les autres joueurs cad traduire l'indice pour chaque joueur
+        FIXME : il faut se mettre a la place de chaque joueurs.
+        '''
+
+
+
         return "p1" #pour tester mon code
 
-    def clue(self):
+    def clue(self, playable):
         '''la fonction renvoie l'indice à donner sous forme de chaine de carctère'''
-
-
-        return "c1"  #pour tester mon code
+        g_1 = 0
+        I_see = [ card for card in self.other_players_cards ]
+        #pour chaque joueur
+        for k in range(nb_players):
+            L = []
+            #calcul son C_i
+            for m in range(nb_cartes):
+                L+=I_see[m+nb_cartes*k]
+            g_1+= C_i(self, L, playable)
+        indice = g_1%8
+        if indice<4:
+            return("N%d"%(indice+1)) #N = Donner un nombre à
+        else:
+            return("C%d"%(indice-3))  #C = Donner une couleur à
 
     def played_since_hint(self):
-        if self.actions == [] : 
+        if self.actions == [] :
             raise liste_vide(" actions list is empty ")
 
         if self.actions[0][0] == 'c':
@@ -275,33 +322,41 @@ class Strat1_ai(AI):
         return n
 
 
-
     def play(self):
         game=self.game
+"""oui """
+        #comme dans le Cheater
+        playable = [ (i+1, card.number) for (i, card) in
+                     enumerate(game.current_hand.cards)
+                     if game.piles[card.color]+1 == card.number ]
 
-        if game.current_hand.recomendation[0][0] == 'p': #si la dernière recomendation est de jouer 
+        discardable = [ i+1 for (i, card) in
+                        enumerate(game.current_hand.cards)
+                        if ( (card.number <= game.piles[card.color])
+                             or (game.current_hand.cards.count(card) > 1)
+                        ) ]
+
+        if game.current_hand.recommendation[0][0] == 'p': #si la dernière recommendation est de jouer
             if played_since_hint() == 0 : #si personne n'a joué depuis l'indice  1)
-                self.actions=[game.current_hand.recomendation[0]] + self.actions  #maj de actions avant le return
-                return game.current_hand.recomendation[0]
+                self.actions=[game.current_hand.recommendation[0]] + self.actions  #maj de actions avant le return
+                return game.current_hand.recommendation[0]
 
             if played_since_hint() == 1 : #si 1 personne a joué depuis l'indices   2)
                 if self.game.red_coins<2:
-                    self.actions=[game.current_hand.recomendation[0]] + self.actions  #maj de actions avant le return
-                    return game.current_hand.recomendation[0]
+                    self.actions=[game.current_hand.recommendation[0]] + self.actions  #maj de actions avant le return
+                    return game.current_hand.recommendation[0]
 
 
 
         if game.blue_coins > 0 :  # 3)
-            c=self.clue()         #give a clue 
+            c=self.clue()         #give a clue
             self.actions = [c] + self.actions
-            self.from_clue_to_play()     #met a jour les hands.recomendation
+            self.from_clue_to_play()     #met a jour les hands.recommendation
             return c
 
-        if game.current_hand.recomendation[0][0] == 'd': #si la dernière recomendation est de defausser 4)
-            actions = [game.current_hand.recomendation[0]] + actions
-            return game.current_hand.recomendation[0]
+        if game.current_hand.recommendation[0][0] == 'd': #si la dernière recommendation est de defausser 4)
+            actions = [game.current_hand.recommendation[0]] + actions
+            return game.current_hand.recommendation[0]
 
         self.actions = ["d1"] + self.actions  # 5)
         return "d1"
-       
-
