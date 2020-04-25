@@ -232,3 +232,30 @@ class Strat1_ai(AI)
     5) Discard card c1
 
     """
+
+    actions=[]  #liste des actions jouées pendant la partie
+                #variable de classe mise à jour à chaque utilisation de play
+                #on saura ce que les autres ont fait avant
+                #liste de chaines de carctères
+
+
+    def from_clue_to_play(self,I_see,clue):
+        '''
+        la fonction prend en entréé le jeu (au cas où) les cartes des autres et un indice (chaine de caractère) 
+        la fonction renvoie une chaine de caractère renvoyant l'action correspondant à l'indice donné
+        ''' 
+    
+
+
+
+
+
+    def play(self):
+        game=self.game
+
+        if actions[-1][0] == 'c': #si la dernière action était un indice
+            if from_clue_to_play(I_see,actions[-1])[0] == p : 
+
+            
+
+
