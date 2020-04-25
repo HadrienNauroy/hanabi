@@ -298,7 +298,7 @@ class Strat1_ai(AI):
             actions = [game.current_hand.recomendation[0]] + actions
             return game.current_hand.recomendation[0]
 
-        self.actions = ["c1"] + self.actions  # 5)
-        return "c1"
+        self.actions = ["d1"] + self.actions  # 5)
+        return "d1"
        
 
