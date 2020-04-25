@@ -138,7 +138,7 @@ class Cheater(AI):
 
 
 
-class stupid_ai(AI):
+class Stupid_ai(AI):
     """
     let's start with a simple AI
 
@@ -153,7 +153,7 @@ class stupid_ai(AI):
 
 """It seems like it's working"""
 
-class basic_ai(AI):
+class Basic_ai(AI):
     """
     let's do something better
 
@@ -181,7 +181,7 @@ class basic_ai(AI):
 
 """it seems ok too but not really efficient"""
 
-class smarter_ai(AI):
+class Smarter_ai(AI):
     """
     let's do something better
 
@@ -203,7 +203,7 @@ class smarter_ai(AI):
                     return"d%d"%(k+1) #idem
 
         if game.blue_coins > 0 :
-            I_see = [ card for card in self.other_players_cards]
+            I_see = [ card for card in self.other_players_cards ]
             print(I_see)
             for c in I_see :
                 #print(c.color)
