@@ -225,7 +225,7 @@ class Smarter_ai(AI):
 class liste_vide(Exception):
     pass
 
-class Strat1_ai(AI)
+class Strat1_ai(AI):
 
     """ Algorithm:
     1) If the most recent recommendation was to play a card
@@ -239,7 +239,7 @@ class Strat1_ai(AI)
 
     """
 
-    self.actions=[]  #liste des actions jouées pendant la partie la derniere action vient en premier
+    actions=[]  #liste des actions jouées pendant la partie la derniere action vient en premier
                      #variable de classe mise à jour à chaque utilisation de play
                      #on saura ce que les autres ont fait avant
                      #liste de chaines de carctères
@@ -250,20 +250,23 @@ class Strat1_ai(AI)
         la fonction prend en entréé le jeu (au cas où) les cartes des autres et un indice (chaine de caractère) 
         la fonction renvoie une chaine de caractère renvoyant l'action correspondant à l'indice donné
         ''' 
+        return "p1"
+
     def clue(self):
         '''la fonction renvoie l'indice à donner sous forme de chaine de carctère'''
+        return "c1"
 
     def played_since_hint(self):
-        if self.actions == [] : 
+        if actions == [] : 
             raise liste_vide(" actions list is empty ")
 
-        if self.actions[0][0] == 'c':
+        if actions[0][0] == 'c':
             return 0
 
         i=0
         n=0
-        while self.actions[i][0] != 'c':
-            if self.actions[i][0] == 'p':
+        while actions[i][0] != 'c':
+            if actions[i][0] == 'p':
                 n+=1
             i+=1
         return n
