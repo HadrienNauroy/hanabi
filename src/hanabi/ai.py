@@ -136,3 +136,227 @@ class Cheater(AI):
         game.log('Cheater is doomed and must discard:', act, myprecious)
         return act
 
+
+
+
+class Stupid_ai(AI):
+    """
+    let's start with a simple AI
+
+    Algorithm :
+        *play a random card
+    """
+
+    def play(self):
+        game = self.game
+        a=randint(0,4)
+        return"p%d"%a
+
+"""It seems like it's working"""
+
+class Basic_ai(AI):
+    """
+    let's do something better
+
+    Algorithm:
+        *if we got two clue on a card play it
+        *if blue_coin>0 give cW clue
+        *if blue_coin<0 discard a card
+
+    """
+
+    def play(self):
+        game=self.game
+
+
+        for k in range(5):
+            if game.current_hand.cards[k].color_clue and game.current_hand.cards[k].number_clue :
+                return"p%d"%k+1 #retour à des indices rééls !
+
+
+        if game.blue_coins > 0:
+            return"cW"
+
+        if game.blue_coins==0 :
+            return"d1"
+
+"""it seems ok too but not really efficient"""
+
+
+
+class Smarter_ai(AI):
+    """
+    let's do something better
+
+    Algorithm:
+        *if we got two clue on a card and the card is playable play it
+        *if we got two clue on a card and the card is disacrdable : discard it
+        *if blue_coin>0 give a new clue
+        *else discard a random card
+
+    """
+    def play(self):
+        game=self.game
+
+        for k in range(5):
+            if game.current_hand.cards[k].color_clue and game.current_hand.cards[k].number_clue :
+                if game.piles[game.current_hand.cards[k].color]+1 == game.current_hand.cards[k].number :
+                    return"p%d"%(k+1) #retour à des indices rééls !
+                if game.piles[game.current_hand.cards[k].color] >= game.current_hand.cards[k].number :
+                    return"d%d"%(k+1) #idem
+
+        if game.blue_coins > 0 :
+            I_see = [ card for card in self.other_players_cards ]
+            print(I_see)
+            for c in I_see :
+                #print(c.color)
+
+                if  not c.color_clue:
+                    clue = "c%s"%c.color
+                    clue = clue[:2] # quick fix, with 3+ players, can't clue cRed anymore, only cR
+                    return clue
+                if not c.number_clue:
+                    return"c%d"%c.number
+
+        else :
+            return"d1"
+"""it seems ok too but not really efficient : average score is 2 """
+
+
+class liste_vide(Exception):
+    pass
+
+class Strat1_ai(AI):
+
+    """ Algorithm:
+    1) If the most recent recommendation was to play a card
+    and no card has been playedsince the last hint, play the recommended card.
+    2) If the most recent recommendation was to play a card, one card has been
+    playedsince the hint was given, and the players have made fewer than two errors, play therecommended card
+    3) If the players have a hint token, give a hint.
+        cf recommendation algo
+    4) If the most recent recommendation was to discard a card, discard the requestedcard.
+    5) Discard card c1
+
+    """
+    nb_cards= 4
+    nb_players = 4
+    actions=[]  #liste des actions jouées pendant la partie la derniere action vient en premier
+                     #variable de classe mise à jour à chaque utilisation de play
+                     #on saura ce que les autres ont fait avant
+                     #liste de chaines de carctères
+
+    def C_i(self, L , playable):
+        #on joue le 5 playable du plus petit indice en premier
+        for k in range(len(L)):
+            if L[k].number == 5 and L[k] in playable:
+                return(k)
+
+        #si pas de 5 on met le plus petit numéro playable de plus petit indice
+        m = 6, l = len(L)+1
+        for k in range(len(L)):
+            if L[k] in playable and L[k]number <m:
+                m = L[k].number
+                l = k
+        if m!=6 and l != len(L)+1:
+            return(k)
+
+        #si y'a une dead card (déjà jouée), on a discard celle de plus petit indice
+        for k in range(len(L)):
+            if L[k] in self.piles():
+                return(4+k)
+
+        #on discard la carte de plus haut numéro de plus petit indice et non indispensable
+        m=0, l =len(L)+1:
+        for k in range(4):
+            if(L[k] in self.decks or L[k] in self.other_players_cards) and (L[k].number>m):
+                m = L[k].number
+                l = k
+        if m!= 0 and l!= len(L)+1:
+            return(k+4)
+
+        #On discard c1
+        return(4)
+
+    def from_clue_to_play(self):
+        '''
+        la fonction est lancée au moment où le joueur donne l'indice.
+        elle doit mettre à jour hand.recommendation pour tous les autres joueurs cad traduire l'indice pour chaque joueur
+        FIXME : il faut se mettre a la place de chaque joueurs.
+        '''
+
+
+
+        return "p1" #pour tester mon code
+
+    def clue(self, playable):
+        '''la fonction renvoie l'indice à donner sous forme de chaine de carctère'''
+        g_1 = 0
+        I_see = [ card for card in self.other_players_cards ]
+        #pour chaque joueur
+        for k in range(nb_players):
+            L = []
+            #calcul son C_i
+            for m in range(nb_cartes):
+                L+=I_see[m+nb_cartes*k]
+            g_1+= C_i(self, L, playable)
+        indice = g_1%8
+        if indice<4:
+            return("N%d"%(indice+1)) #N = Donner un nombre à
+        else:
+            return("C%d"%(indice-3))  #C = Donner une couleur à
+
+    def played_since_hint(self):
+        if self.actions == [] :
+            raise liste_vide(" actions list is empty ")
+
+        if self.actions[0][0] == 'c':
+            return 0
+
+        i=0
+        n=0
+        while self.actions[i][0] != 'c':
+            if self.actions[i][0] == 'p':
+                n+=1
+            i+=1
+        return n
+
+
+    def play(self):
+        game=self.game
+"""oui """
+        #comme dans le Cheater
+        playable = [ (i+1, card.number) for (i, card) in
+                     enumerate(game.current_hand.cards)
+                     if game.piles[card.color]+1 == card.number ]
+
+        discardable = [ i+1 for (i, card) in
+                        enumerate(game.current_hand.cards)
+                        if ( (card.number <= game.piles[card.color])
+                             or (game.current_hand.cards.count(card) > 1)
+                        ) ]
+
+        if game.current_hand.recommendation[0][0] == 'p': #si la dernière recommendation est de jouer
+            if played_since_hint() == 0 : #si personne n'a joué depuis l'indice  1)
+                self.actions=[game.current_hand.recommendation[0]] + self.actions  #maj de actions avant le return
+                return game.current_hand.recommendation[0]
+
+            if played_since_hint() == 1 : #si 1 personne a joué depuis l'indices   2)
+                if self.game.red_coins<2:
+                    self.actions=[game.current_hand.recommendation[0]] + self.actions  #maj de actions avant le return
+                    return game.current_hand.recommendation[0]
+
+
+
+        if game.blue_coins > 0 :  # 3)
+            c=self.clue()         #give a clue
+            self.actions = [c] + self.actions
+            self.from_clue_to_play()     #met a jour les hands.recommendation
+            return c
+
+        if game.current_hand.recommendation[0][0] == 'd': #si la dernière recommendation est de defausser 4)
+            actions = [game.current_hand.recommendation[0]] + actions
+            return game.current_hand.recommendation[0]
+
+        self.actions = ["d1"] + self.actions  # 5)
+        return "d1"

@@ -87,13 +87,13 @@ class Hand:
     """A Hanabi hand, with n cards, drawn from the deck.
     Also used for the discard pile.
     """
-    def __init__(self, deck, n=5):
     def __init__(self, deck, n=4):
         # TODO: see if it's easier to derive from list
         self.cards = []
         for i in range(n):
             self.cards.append(deck.draw())
         self._deck = deck  # not sure if I need it
+        self.recommendation =["x1"] #la première recommendation n en est pas une !
 
     def __str__(self):
         return " ".join([c.str_color() for c in self.cards])
