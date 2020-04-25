@@ -148,7 +148,7 @@ class stupid_ai(AI):
 
     def play(self):
         game = self.game
-        a=randint(1,5)
+        a=randint(0,4)
         return"p%d"%a
 
 """It seems like it's working"""
@@ -217,7 +217,18 @@ class smarter_ai(AI):
 
         else :
             return"d1"
-
 """it seems ok too but not really efficient : average score is 2 """
-""" ah nan so sad"""
-""" stp commit"""
+
+class Strat1_ai(AI)
+
+    """ Algorithm:
+    1) If the most recent recommendation was to play a card
+    and no card has been playedsince the last hint, play the recommended card.
+    2) If the most recent recommendation was to play a card, one card has been
+    playedsince the hint was given, and the players have made fewer than two errors, play therecommended card
+    3) If the players have a hint token, give a hint.
+        cf recommendation algo
+    4) If the most recent recommendation was to discard a card, discard the requestedcard.
+    5) Discard card c1
+
+    """
