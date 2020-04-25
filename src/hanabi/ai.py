@@ -247,14 +247,17 @@ class Strat1_ai(AI):
 
     def from_clue_to_play(self):
         '''
-        la fonction prend en entréé le jeu (au cas où) les cartes des autres et un indice (chaine de caractère) 
-        la fonction renvoie une chaine de caractère renvoyant l'action correspondant à l'indice donné
+        la fonction est lancée au moment où le joueur donne l'indice.
+        elle doit mettre à jour hand.recomendation pour tous les autres joueurs cad traduire l'indice pour chaque joueur
+        FIXME : il faut se mettre a la place de chaque joueurs. 
         ''' 
-        return "p1"
+        return "p1" #pour tester mon code
 
     def clue(self):
         '''la fonction renvoie l'indice à donner sous forme de chaine de carctère'''
-        return "c1"
+
+
+        return "c1"  #pour tester mon code
 
     def played_since_hint(self):
         if self.actions == [] : 
