@@ -245,7 +245,7 @@ class Strat1_ai(AI):
                      #liste de chaines de carctères
 
 
-    def from_clue_to_play(self,I_see,clue):
+    def from_clue_to_play(self):
         '''
         la fonction prend en entréé le jeu (au cas où) les cartes des autres et un indice (chaine de caractère) 
         la fonction renvoie une chaine de caractère renvoyant l'action correspondant à l'indice donné
@@ -257,16 +257,16 @@ class Strat1_ai(AI):
         return "c1"
 
     def played_since_hint(self):
-        if actions == [] : 
+        if self.actions == [] : 
             raise liste_vide(" actions list is empty ")
 
-        if actions[0][0] == 'c':
+        if self.actions[0][0] == 'c':
             return 0
 
         i=0
         n=0
-        while actions[i][0] != 'c':
-            if actions[i][0] == 'p':
+        while self.actions[i][0] != 'c':
+            if self.actions[i][0] == 'p':
                 n+=1
             i+=1
         return n
@@ -278,27 +278,27 @@ class Strat1_ai(AI):
 
         if game.current_hand.recomendation[0][0] == 'p': #si la dernière recomendation est de jouer 
             if played_since_hint() == 0 : #si personne n'a joué depuis l'indice  1)
-                actions=[game.current_hand.recomendation[0]] + actions  #maj de actions avant le return
+                self.actions=[game.current_hand.recomendation[0]] + self.actions  #maj de actions avant le return
                 return game.current_hand.recomendation[0]
 
             if played_since_hint() == 1 : #si 1 personne a joué depuis l'indices   2)
                 if self.game.red_coins<2:
-                    actions=[game.current_hand.recomendation[0]] + actions  #maj de actions avant le return
+                    self.actions=[game.current_hand.recomendation[0]] + self.actions  #maj de actions avant le return
                     return game.current_hand.recomendation[0]
 
 
 
         if game.blue_coins > 0 :  # 3)
-            clue=clue()         #give a clue 
-            actions = [clue] + actions
-            from_clue_to_play()     #met a jour les hands.recomendation
-            return clue
+            c=self.clue()         #give a clue 
+            self.actions = [c] + self.actions
+            self.from_clue_to_play()     #met a jour les hands.recomendation
+            return c
 
         if game.current_hand.recomendation[0][0] == 'd': #si la dernière recomendation est de defausser 4)
             actions = [game.current_hand.recomendation[0]] + actions
             return game.current_hand.recomendation[0]
 
-        actions = ["c1"] + actions  # 5)
+        self.actions = ["c1"] + self.actions  # 5)
         return "c1"
        
 

@@ -93,7 +93,7 @@ class Hand:
         for i in range(n):
             self.cards.append(deck.draw())
         self._deck = deck  # not sure if I need it
-        self.recomendation =None
+        self.recomendation =["x1"] #la première recommendation n en est pas une !
 
     def __str__(self):
         return " ".join([c.str_color() for c in self.cards])
