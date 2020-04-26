@@ -240,34 +240,37 @@ class Strat1_ai(AI):
 
     """
     nb_cards= 4
-    nb_players = 4
+    nb_players = 5
     actions=[]  #liste des actions jouées pendant la partie la derniere action vient en premier
                      #variable de classe mise à jour à chaque utilisation de play
                      #on saura ce que les autres ont fait avant
                      #liste de chaines de carctères
 
-    def C_i(self, L , playable):
+
+    def C_i(self, L ):
+
+        
         #on joue le 5 playable du plus petit indice en premier
         for k in range(len(L)):
-            if L[k].number == 5 and L[k] in playable:
+            if L[k].number == 5 and self.game.piles[L[k].color] == 4: #si le 5 est jouable
                 return(k)
 
         #si pas de 5 on met le plus petit numéro playable de plus petit indice
-        m = 6, l = len(L)+1
+        m,l = 6, len(L)+1
         for k in range(len(L)):
-            if L[k] in playable and L[k]number <m:
+            if (self.game.piles[L[k].color] == L[k].number +1) and (L[k].number <m) :  #si jouable et meilleur
                 m = L[k].number
                 l = k
-        if m!=6 and l != len(L)+1:
+        if m!=6 and l != len(L)+1:  #FIXME je comprends pas bien cette double condition !
             return(k)
 
         #si y'a une dead card (déjà jouée), on a discard celle de plus petit indice
         for k in range(len(L)):
-            if L[k] in self.piles():
+            if L[k].number <= self.game.piles[L[k].color]: 
                 return(4+k)
 
         #on discard la carte de plus haut numéro de plus petit indice et non indispensable
-        m=0, l =len(L)+1:
+        m, l = 0 , len(L)+1 #FIXME : j 'ai rien compris à celui la
         for k in range(4):
             if(L[k] in self.decks or L[k] in self.other_players_cards) and (L[k].number>m):
                 m = L[k].number
@@ -289,22 +292,24 @@ class Strat1_ai(AI):
 
         return "p1" #pour tester mon code
 
-    def clue(self, playable):
+    def clue(self):
         '''la fonction renvoie l'indice à donner sous forme de chaine de carctère'''
         g_1 = 0
         I_see = [ card for card in self.other_players_cards ]
         #pour chaque joueur
-        for k in range(nb_players):
+        for k in range(self.nb_players-1):
             L = []
             #calcul son C_i
-            for m in range(nb_cartes):
-                L+=I_see[m+nb_cartes*k]
-            g_1+= C_i(self, L, playable)
+            for m in range(self.nb_cards):
+                L+=[I_see[m+self.nb_cards*k]]
+                print("L[] : " , L , "\n")
+                print("L[0] : ",L[0],"L[O].color : ", L[0].color)
+            g_1+= self.C_i(L)
         indice = g_1%8
         if indice<4:
-            return("N%d"%(indice+1)) #N = Donner un nombre à
+            return("c1%d"%(indice+1)) #N = Donner un nombre (1 au hasard) à
         else:
-            return("C%d"%(indice-3))  #C = Donner une couleur à
+            return("CW%d"%(indice-3))  #C = Donner une couleur (white au hasard) à
 
     def played_since_hint(self):
         if self.actions == [] :
@@ -324,11 +329,15 @@ class Strat1_ai(AI):
 
     def play(self):
         game=self.game
-"""oui """
+        """oui """
         #comme dans le Cheater
-        playable = [ (i+1, card.number) for (i, card) in
-                     enumerate(game.current_hand.cards)
-                     if game.piles[card.color]+1 == card.number ]
+        playable = []       #cartes jouables en fonction des piles
+        I_see = [ card for card in self.other_players_cards ]
+
+        print("playable : ")
+        print(playable)
+        print("\n self.pile : ", game.piles, "\n")
+        print("I_see : ", I_see , "\n")
 
         discardable = [ i+1 for (i, card) in
                         enumerate(game.current_hand.cards)
