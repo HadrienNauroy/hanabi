@@ -247,7 +247,30 @@ class Strat1_ai(AI):
                      #liste de chaines de carctères
 
 
-    def C_i(self, L ):
+    def is_indispensables(self,card):
+        '''la fonction determine si une carte est indispensable'''
+        if card.number == 5:
+            return True
+        if card.number == 1 : 
+            i=0
+            for c in range(len(self.game.discard_pile)):
+                if c.color == card.color and c.number == card.number : 
+                    i+=1
+            if i>=2 :
+                return True
+            else :
+                return False
+        else  : 
+            i=0
+            for c in range(len(self.game.discard_pile)):
+                if c.color == card.color and c.number == card.number : 
+                    i+=1
+            if i>=1 :
+                return True
+            else :
+                return False
+
+    def c_i(self, L ):
 
         
         #on joue le 5 playable du plus petit indice en premier
@@ -271,8 +294,9 @@ class Strat1_ai(AI):
 
         #on discard la carte de plus haut numéro de plus petit indice et non indispensable
         m, l = 0 , len(L)+1 #FIXME : j 'ai rien compris à celui la
-        for k in range(4):
-            if(L[k] in self.decks or L[k] in self.other_players_cards) and (L[k].number>m):
+        for k in range(len(L)):
+            if L[k].number > m and not self.is_indispensables(L[k]):  #si on a une carte plus grand non indispensable
+                                                                       #la condition indice plus grand est implicite avec la boucle
                 m = L[k].number
                 l = k
         if m!= 0 and l!= len(L)+1:
@@ -295,21 +319,20 @@ class Strat1_ai(AI):
     def clue(self):
         '''la fonction renvoie l'indice à donner sous forme de chaine de carctère'''
         g_1 = 0
-        I_see = [ card for card in self.other_players_cards ]
+        I_see = self.other_players_cards 
+
         #pour chaque joueur
         for k in range(self.nb_players-1):
             L = []
             #calcul son C_i
             for m in range(self.nb_cards):
                 L+=[I_see[m+self.nb_cards*k]]
-                print("L[] : " , L , "\n")
-                print("L[0] : ",L[0],"L[O].color : ", L[0].color)
-            g_1+= self.C_i(L)
+            g_1+= self.c_i(L)
         indice = g_1%8
         if indice<4:
             return("c1%d"%(indice+1)) #N = Donner un nombre (1 au hasard) à
         else:
-            return("CW%d"%(indice-3))  #C = Donner une couleur (white au hasard) à
+            return("cW%d"%(indice-3))  #C = Donner une couleur (white au hasard) à
 
     def played_since_hint(self):
         if self.actions == [] :
@@ -330,20 +353,12 @@ class Strat1_ai(AI):
     def play(self):
         game=self.game
         """oui """
-        #comme dans le Cheater
-        playable = []       #cartes jouables en fonction des piles
-        I_see = [ card for card in self.other_players_cards ]
+        I_see = self.other_players_cards 
 
-        print("playable : ")
-        print(playable)
+        
         print("\n self.pile : ", game.piles, "\n")
         print("I_see : ", I_see , "\n")
 
-        discardable = [ i+1 for (i, card) in
-                        enumerate(game.current_hand.cards)
-                        if ( (card.number <= game.piles[card.color])
-                             or (game.current_hand.cards.count(card) > 1)
-                        ) ]
 
         if game.current_hand.recommendation[0][0] == 'p': #si la dernière recommendation est de jouer
             if played_since_hint() == 0 : #si personne n'a joué depuis l'indice  1)
