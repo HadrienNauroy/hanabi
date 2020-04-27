@@ -253,7 +253,7 @@ class Strat1_ai(AI):
             return True
         if card.number == 1 : 
             i=0
-            for c in range(len(self.game.discard_pile)):
+            for c in self.game.discard_pile.cards :
                 if c.color == card.color and c.number == card.number : 
                     i+=1
             if i>=2 :
@@ -262,7 +262,7 @@ class Strat1_ai(AI):
                 return False
         else  : 
             i=0
-            for c in range(len(self.game.discard_pile)):
+            for c in self.game.discard_pile.cards :
                 if c.color == card.color and c.number == card.number : 
                     i+=1
             if i>=1 :
@@ -323,16 +323,16 @@ class Strat1_ai(AI):
 
         #pour chaque joueur
         for k in range(self.nb_players-1):
-            L = []
-            #calcul son C_i
-            for m in range(self.nb_cards):
-                L+=[I_see[m+self.nb_cards*k]]
+            L=I_see[self.nb_cards*k : self.nb_cards*(k+1)-1]
             g_1+= self.c_i(L)
         indice = g_1%8
         if indice<4:
-            return("c1%d"%(indice+1)) #N = Donner un nombre (1 au hasard) à
+            return("c%d%d"%(self.other_players_cards[(indice)*(self.nb_cards)].number, (indice+1))) #N = Donner un nombre celui de la première carte au hasard à
         else:
-            return("cW%d"%(indice-3))  #C = Donner une couleur (white au hasard) à
+            clue ="c%s%d" %(self.other_players_cards[(indice-4)*(self.nb_cards)].color ,(indice-3))  #C = Donner une couleur celle de la première carte à
+            clue = clue[:2]+clue[-1] # quick fix, with 3+ players, can't clue cRed2 anymore, only cR2
+            return(clue)
+
 
     def played_since_hint(self):
         if self.actions == [] :
