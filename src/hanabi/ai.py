@@ -324,8 +324,9 @@ class Strat1_ai(AI):
         #pour chaque joueur
         for k in range(self.nb_players-1):
             L=I_see[self.nb_cards*k : self.nb_cards*(k+1)-1]
-            g_1+= self.c_i(L)
+            g_1+= self.c_i(L) #on calcul ci
         indice = g_1%8
+
         if indice<4:
             return("c%d%d"%(self.other_players_cards[(indice)*(self.nb_cards)].number, (indice+1))) #N = Donner un nombre celui de la première carte au hasard à
         else:
@@ -341,8 +342,7 @@ class Strat1_ai(AI):
         if self.actions[0][0] == 'c':
             return 0
 
-        i=0
-        n=0
+        i,n=0,0
         while self.actions[i][0] != 'c':
             if self.actions[i][0] == 'p':
                 n+=1
@@ -353,12 +353,10 @@ class Strat1_ai(AI):
     def play(self):
         game=self.game
         """oui """
-        I_see = self.other_players_cards 
 
-        
-        print("\n self.pile : ", game.piles, "\n")
-        print("I_see : ", I_see , "\n")
-
+        #I_see = self.other_players_cards 
+        #print("\n self.pile : ", game.piles, "\n")
+        #print("I_see : ", I_see , "\n")
 
         if game.current_hand.recommendation[0][0] == 'p': #si la dernière recommendation est de jouer
             if played_since_hint() == 0 : #si personne n'a joué depuis l'indice  1)
