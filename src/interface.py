@@ -28,10 +28,10 @@ class application :
 
 		"tous les boutons qui seront utiles par la suite"
 
-		self.play=Button(self.master,text='Play',command=self.to_play())
-		self.discard=Button(self.master,text='Discard',command=self.to_discard())
-		self.examine=Button(self.master, text = 'examine Piles ', command = self.to_examine())
-		self.clue=Button(self.master, text='Give a Clue', command=self.to_clue())
+		self.play=Button(self.master,text='Play',command=self.to_play)  #l'erreur est ici il faut mettre self.to_play et non self.to_play()
+		self.discard=Button(self.master,text='Discard',command=self.to_discard)
+		self.examine=Button(self.master, text = 'examine Piles ', command = self.to_examine)
+		self.clue=Button(self.master, text='Give a Clue', command=self.to_clue)
 
 		self.P1=Button(self.master,text='Card 1',command=self.p(1))
 		self.P2=Button(self.master,text='Card 2',command=self.p(2))
@@ -107,7 +107,7 @@ class application :
 		self.clue.pack()
 		self.examine.pack()
 		self.discard.pack()
-		self.play.pack_forget()  #FIXME : pas d'erreur.
+		self.play.pack_forget()  #FIXME : pas d'erreur 
 
 	def to_play(self):
 		
@@ -117,7 +117,8 @@ class application :
 		self.champ_label1.pack_forget()
 		self.clue.pack_forget()
 		self.examine.pack_forget()
-		self.champ_label2 = Label(master, text="Wich card do you want to play ? ",font=("Helvetica", 16))
+		self.champ_label2 = Label(self.master, text="Wich card do you want to play ? ",font=("Helvetica", 16))
+		self.champ_label2.pack()
 
 		"Nouveaux boutons"
 		self.P1.pack()
