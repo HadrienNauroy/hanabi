@@ -63,6 +63,7 @@ class application :
 		self.master.mainloop()
 
 
+
 	def singlep(self):
 
 		'''mode 1humain et une ia'''
@@ -111,12 +112,12 @@ class application :
 	def to_play(self):
 		
 		"MAJ affichage"
-		#self.play.pack_forget()
-		#self.discard.pack_forget()
-		#self.champ_label1.pack_forget()
-		#self.clue.pack_forget()
-		#self.examine.pack_forget()
-		#self.champ_label2 = Label(master, text="Wich card do you want to play ? ",font=("Helvetica", 16))
+		self.play.pack_forget() #FIXME : une erreur (application' object has no attribute 'Play')
+		self.discard.pack_forget()
+		self.champ_label1.pack_forget()
+		self.clue.pack_forget()
+		self.examine.pack_forget()
+		self.champ_label2 = Label(master, text="Wich card do you want to play ? ",font=("Helvetica", 16))
 
 		"Nouveaux boutons"
 		self.P1.pack()
@@ -126,11 +127,44 @@ class application :
 
 
 	def to_discard(self):
-		a=1
 
+		"MAJ affichage"
+		self.play.pack_forget()
+		self.discard.pack_forget()
+		self.champ_label1.pack_forget()
+		self.clue.pack_forget()
+		self.examine.pack_forget()
+		self.champ_label2 = Label(self.master, text="Wich card do you want to discard ? ",font=("Helvetica", 16))
 
-	def to_clue(self) :
-		a=2
+		"Nouveaux boutons"
+		
+		self.D1.pack()
+		self.D2.pack()
+		self.D3.pack()
+		self.D4.pack()
+
+	def to_clue(self) : 
+
+		"MAJ affichage"
+		self.play.pack_forget()
+		self.discard.pack_forget()
+		self.champ_label1.pack_forget()
+		self.clue.pack_forget()
+		self.self.examine.pack_forget()
+		self.champ_label2 = Label(self.master, text="What clue do you want to give ? ",font=("Helvetica", 16))
+
+		"Nouveaux boutons"
+		
+		self.C1.pack()
+		self.C2.pack()
+		self.C3.pack()
+		self.C4.pack()
+		self.C5.pack()
+		self.C6.pack()
+		self.C7.pack()
+		self.C8.pack()
+		self.C9.pack()
+
 
 	def to_examine(self):
 		a=2
