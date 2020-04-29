@@ -3,7 +3,7 @@ Artificial Intelligence to play Hanabi.
 """
 
 import itertools
-from random import *
+import random as random
 
 class AI:
     """
@@ -149,7 +149,7 @@ class Stupid_ai(AI):
 
     def play(self):
         game = self.game
-        a=randint(0,4)
+        a=random.randint(0,4)
         return"p%d"%a
 
 """It seems like it's working"""

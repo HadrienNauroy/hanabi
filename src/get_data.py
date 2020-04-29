@@ -12,7 +12,7 @@ results=26*[0]
 
 for k in range(n):
 	game=hanabi.Game(nb_players)
-	ai=hanabi.ai.Strat1_ai(game)
+	ai=hanabi.ai.Cheater(game)
 	game.ai=ai
 	game.run()
 	res=game.score
