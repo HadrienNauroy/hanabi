@@ -55,6 +55,8 @@ class Application :
 		
 		self.quit=Button(self.master,text='Quit',command=self.master.destroy)
 		self.back_menu=Button(self.master,text='Back to menu',command=self.menu)
+		self.pop=Button(self.master,text='pop',command=self.pop)
+		self.cd =Button(self.master,text='Okay',command=self.multi_turn)
 
 
 		"tous les labels qui seront utiles par la suite"
@@ -64,6 +66,11 @@ class Application :
 		self.champ_label2 = Label(self.master, text="These are piles :  " ,font=("Helvetica", 16))
 		self.champ_label3 = Label(self.master, text="Can't clue this ! " ,font=("Helvetica", 16))
 		self.champ_label4 = Label(self.master, text="Can't clue anymore ! " ,font=("Helvetica", 16))
+		self.champ_label5 = Label(self.master, text="Wich card do you want to discard ? ",font=("Helvetica", 16))
+		self.champ_label6 = Label(self.master, text="Can't discard : 8 blue coins ",font=("Helvetica", 16))
+		self.sc=0
+		self.score = Label(self.master, text="Well done your score is %d ! "%self.sc ,font=("Helvetica", 16))
+		self.last= Label(self.master, text="Last turn ! "%self.score ,font=("Helvetica", 16))
 		
 
 		self.photo = PhotoImage(file = "fireworks.gif",format="gif -index 2")
@@ -72,7 +79,7 @@ class Application :
 		self.sad= Label(self.master, text='Maybe next time !', font=("Helvetica",16))
 		self.loss= Label(self.master, text='You loose : 3 red coins !', font=("Helvetica",16))
 
-
+		self.buffer=0
 		self.menu()
 		self.master.mainloop()
 		
@@ -84,11 +91,12 @@ class Application :
 		#self.red_coins=0  
 
 		"Maj affichage"
-
+		self.last.pack_forget()
 		self.loss.pack_forget()
 		self.back_menu.pack_forget()
 		self.quit.pack_forget()
 		self.sad.pack_forget()
+		self.score.pack_forget()
 
 
 		"menu du jeu"
@@ -96,15 +104,19 @@ class Application :
 		self.single.pack()
 		self.multi.pack()
 
+	def pop(self):
+		self.game.deck.draw()
+		print(self.game.deck)
+
 
 	def verrif_color(self,color):
-		for k in range(4):
+		for k in range(len(self.game.hands[1].cards)):
 			if str(self.game.hands[1].cards[k].color) == color:
 				return True
 		return False
 
 	def verrif_number(self,nb):
-		for k in range(4):
+		for k in range(len(self.game.hands[1].cards)):
 			if self.game.hands[1].cards[k].number == nb :
 				return True
 		return False
@@ -137,6 +149,7 @@ class Application :
 		self.single.pack_forget()
 		self.multi.pack_forget()
 		self.champ_label.pack_forget()
+		self.champ_label5.pack_forget()
 		self.champ_label3.pack_forget()
 		self.champ_label4.pack_forget()
 		self.back.pack_forget()
@@ -160,14 +173,38 @@ class Application :
 		self.C7.pack_forget()
 		self.C8.pack_forget()
 		self.C9.pack_forget()
+		self.last.pack_forget()
+		self.cd.pack_forget()
+		self.champ_label6.pack_forget()
+
 
 
 		"boutons"
+		#self.pop.pack() #pour debuger et vider le deck
 		
-		self.play.pack()
-		self.clue.pack()
-		self.examine.pack()
-		self.discard.pack()
+		if len(self.game.deck.cards)<1:
+			self.buffer+=1
+		if self.buffer==3:
+			print(self.game.score)
+			self.sc=self.game.score
+			self.score = Label(self.master, text="Well done your score is %d ! "%self.sc ,font=("Helvetica", 16))
+			self.score.pack()
+			self.back_menu.pack()
+			self.quit.pack()
+			self.champ_label1.pack_forget()
+			self.sad.pack_forget()
+			self.bravo.pack_forget()
+
+		else :
+			if len(self.game.deck.cards)<1:
+				self.last.pack()
+			self.play.pack()
+			self.clue.pack()
+			self.examine.pack()
+			self.discard.pack()
+
+		
+
 		
 
 	def to_play(self):
@@ -194,26 +231,28 @@ class Application :
 
 
 	def to_discard(self):
-
-		"MAJ affichage"
-		self.bravo.pack_forget()
-		self.sad.pack_forget()
-		self.play.pack_forget()
-		self.discard.pack_forget()
-		self.champ_label1.pack_forget()
-		self.clue.pack_forget()
-		self.examine.pack_forget()
-		self.champ_label2 = Label(self.master, text="Wich card do you want to discard ? ",font=("Helvetica", 16))
-
-		"Nouveaux boutons"
+		if self.game.blue_coins<8:
+			"MAJ affichage"
+			self.bravo.pack_forget()
+			self.sad.pack_forget()
+			self.play.pack_forget()
+			self.discard.pack_forget()
+			self.champ_label1.pack_forget()
+			self.clue.pack_forget()
+			self.examine.pack_forget()
+			self.champ_label5.pack()
+			"Nouveaux boutons"
 		
-		self.D1.pack()
-		self.D2.pack()
-		self.D3.pack()
-		self.D4.pack()
-		self.D5.pack()
-		self.back.pack()
+			self.D1.pack()
+			self.D2.pack()
+			self.D3.pack()
+			self.D4.pack()
+			self.D5.pack()
+			self.back.pack()
 
+		else:
+			#self.cd.pack()
+			self.champ_label6.pack()
 
 	def to_clue(self) : 
 
@@ -264,6 +303,7 @@ class Application :
 		self.OK.pack()
 
 	def p_1(self):
+		
 		card=self.game.current_hand.cards[0]
 		pile=self.game.piles[card.color]
 		if card.number == pile+1 : 
