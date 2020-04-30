@@ -6,7 +6,7 @@ from tkinter import *
 import hanabi
 
 
-
+	
 class Application : 
 
 	def __init__(self): 
@@ -42,11 +42,13 @@ class Application :
 		self.P2=Button(self.master,text='Card 2',command=self.p_2)
 		self.P3=Button(self.master,text='Card 3',command=self.p_3)
 		self.P4=Button(self.master,text='Card 4',command=self.p_4)
+		self.P5=Button(self.master,text='Card 5',command=self.p_5)
 
 		self.D1=Button(self.master,text='Card 1',command=self.d_1)
 		self.D2=Button(self.master,text='Card 2',command=self.d_2)
 		self.D3=Button(self.master,text='Card 3',command=self.d_3)
 		self.D4=Button(self.master,text='Card 4',command=self.d_4)
+		self.D5=Button(self.master,text='Card 4',command=self.d_5)
 
 		self.C1=Button(self.master,text='Clue 1',command=self.c_1)
 		self.C2=Button(self.master,text='Clue 2',command=self.c_2)
@@ -59,16 +61,21 @@ class Application :
 		self.C9=Button(self.master,text='Clue Blue',command=self.c_B)
 
 		self.OK=Button(self.master,text='Okay',command=self.multi_turn)
+		self.back=Button(self.master,text='Back',command=self.multi_turn)
+		
 
 
 		"tous les labels qui seront utiles par la suite"
 
 		self.champ_label2 = Label(self.master, text="These are piles :  " ,font=("Helvetica", 16))
 		self.champ_label3 = Label(self.master, text="Can't clue this ! " ,font=("Helvetica", 16))
+		self.champ_label4 = Label(self.master, text="Can't clue anymore ! " ,font=("Helvetica", 16))
+		
 
-		self.photo = PhotoImage(file = "fireworks.gif")
+		self.photo = PhotoImage(file = "fireworks.gif",format="gif -index 2")
 		self.image = Label(self.master, image = self.photo)
-		self.bravo= Label(self.master, text='Bravo', font=("Helvetica",16))
+		self.bravo= Label(self.master, text='Well done !', font=("Helvetica",16))
+		self.sad= Label(self.master, text='Maybe next time !', font=("Helvetica",16))
 
 
 		self.master.mainloop()
@@ -85,7 +92,6 @@ class Application :
 			if self.game.hands[1].cards[k].number == nb :
 				return True
 		return False
-
 
 
 
@@ -116,16 +122,20 @@ class Application :
 		self.multi.pack_forget()
 		self.champ_label.pack_forget()
 		self.champ_label3.pack_forget()
+		self.champ_label4.pack_forget()
+		self.back.pack_forget()
 		#self.image.pack_forget()
 		self.D1.pack()
 		self.D1.pack_forget()
 		self.D2.pack_forget()
 		self.D3.pack_forget()
 		self.D4.pack_forget()
+		self.D5.pack_forget()
 		self.P1.pack_forget()
 		self.P2.pack_forget()
 		self.P3.pack_forget()
 		self.P4.pack_forget()
+		self.P5.pack_forget()
 		self.C1.pack_forget()
 		self.C2.pack_forget()
 		self.C3.pack_forget()
@@ -148,7 +158,9 @@ class Application :
 	def to_play(self):
 		
 		"MAJ affichage"
-		self.play.pack_forget() #FIXME : une erreur (application' object has no attribute 'Play')
+		self.bravo.pack_forget()
+		self.sad.pack_forget()
+		self.play.pack_forget() 
 		self.discard.pack_forget()
 		self.champ_label1.pack_forget()
 		self.clue.pack_forget()
@@ -161,11 +173,16 @@ class Application :
 		self.P2.pack()
 		self.P3.pack()
 		self.P4.pack()
+		self.P5.pack()
+		self.back.pack()
+
 
 
 	def to_discard(self):
 
 		"MAJ affichage"
+		self.bravo.pack_forget()
+		self.sad.pack_forget()
 		self.play.pack_forget()
 		self.discard.pack_forget()
 		self.champ_label1.pack_forget()
@@ -179,33 +196,46 @@ class Application :
 		self.D2.pack()
 		self.D3.pack()
 		self.D4.pack()
+		self.D5.pack()
+		self.back.pack()
+
 
 	def to_clue(self) : 
 
-		"MAJ affichage"
-		self.play.pack_forget()
-		self.discard.pack_forget()
-		self.champ_label1.pack_forget()
-		self.clue.pack_forget()
-		self.examine.pack_forget()
-		self.champ_label2 = Label(self.master, text="What clue do you want to give ? ",font=("Helvetica", 16))
-		self.champ_label2.pack()
+		if  not (self.game.blue_coins > 0 ) :
+			self.champ_label4.pack()
+		else :
 
-		"Nouveaux boutons"
+			"MAJ affichage"
+			self.bravo.pack_forget()
+			self.sad.pack_forget()
+			self.play.pack_forget()
+			self.discard.pack_forget()
+			self.champ_label1.pack_forget()
+			self.clue.pack_forget()
+			self.examine.pack_forget()
+			self.champ_label2 = Label(self.master, text="What clue do you want to give ? ",font=("Helvetica", 16))
+			self.champ_label2.pack()
+
+			"Nouveaux boutons"
 		
-		self.C1.pack()
-		self.C2.pack()
-		self.C3.pack()
-		self.C4.pack()
-		self.C5.pack()
-		self.C6.pack()
-		self.C7.pack()
-		self.C8.pack()
-		self.C9.pack()
+			self.C1.pack()
+			self.C2.pack()
+			self.C3.pack()
+			self.C4.pack()
+			self.C5.pack()
+			self.C6.pack()
+			self.C7.pack()
+			self.C8.pack()
+			self.C9.pack()
+			self.back.pack()
 
 
 	def to_examine(self):
+
 		"MAJ affichage"
+		self.bravo.pack_forget()
+		self.sad.pack_forget()
 		self.play.pack_forget()
 		self.discard.pack_forget()
 		self.champ_label1.pack_forget()
@@ -221,6 +251,10 @@ class Application :
 	def p_1(self):
 		card=self.game.current_hand.cards[0]
 		pile=self.game.piles[card.color]
+		if card.number == pile+1 : 
+			self.bravo.pack()
+		else : 
+			self.sad.pack()
 		self.game.turn("p1")
 		self.player=(self.player+1)%2
 		self.multi_turn()
@@ -229,6 +263,8 @@ class Application :
 	def p_2(self):
 		card=self.game.current_hand.cards[1]
 		pile=self.game.piles[card.color]
+		if card.number == pile+1 : 
+			self.bravo.pack()
 		self.game.turn("p2")
 		self.player=(self.player+1)%2
 		self.multi_turn()
@@ -236,6 +272,8 @@ class Application :
 	def p_3(self):
 		card=self.game.current_hand.cards[2]
 		pile=self.game.piles[card.color]
+		if card.number == pile+1 : 
+			self.bravo.pack()
 		self.game.turn("p3")
 		self.player=(self.player+1)%2
 		self.multi_turn()
@@ -243,7 +281,18 @@ class Application :
 	def p_4(self):
 		card=self.game.current_hand.cards[3]
 		pile=self.game.piles[card.color]
+		if card.number == pile+1 : 
+			self.bravo.pack()
 		self.game.turn("p4")
+		self.player=(self.player+1)%2
+		self.multi_turn()
+
+	def p_5(self):
+		card=self.game.current_hand.cards[4]
+		pile=self.game.piles[card.color]
+		if card.number == pile+1 : 
+			self.bravo.pack()
+		self.game.turn("p5")
 		self.player=(self.player+1)%2
 		self.multi_turn()
 	
@@ -272,6 +321,13 @@ class Application :
 		card=self.game.current_hand.cards[3]
 		pile=self.game.piles[card.color]
 		self.game.turn("d4")
+		self.player=(self.player+1)%2
+		self.multi_turn()
+
+	def d_5(self):
+		card=self.game.current_hand.cards[4]
+		pile=self.game.piles[card.color]
+		self.game.turn("d5")
 		self.player=(self.player+1)%2
 		self.multi_turn()
 
