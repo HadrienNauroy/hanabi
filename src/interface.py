@@ -16,22 +16,12 @@ class Application :
 		self.master.title("Hanabi")
 		self.master.geometry("800x500")
 
-		"set up du jeu"
-		self.game=hanabi.Game()
-		self.player=0
-
-
-		"menu du jeu"
-		self.champ_label = Label(self.master, text="Bienvenue sur Hanabi",font=("Helvetica", 16))
-		self.champ_label.pack()
-
-		self.single=Button(self.master,text='Single Player',command=self.singlep)
-		self.single.pack()
-
-		self.multi=Button(self.master,text='Two players',command=self.multi_turn)
-		self.multi.pack()
+		
 
 		"tous les boutons qui seront utiles par la suite"
+
+		self.single=Button(self.master,text='Single Player',command=self.singlep)
+		self.multi=Button(self.master,text='Two players',command=self.multi_turn)
 
 		self.play=Button(self.master,text='Play',command=self.to_play)  #l'erreur est ici il faut mettre self.to_play et non self.to_play()
 		self.discard=Button(self.master,text='Discard',command=self.to_discard)
@@ -63,9 +53,13 @@ class Application :
 		self.OK=Button(self.master,text='Okay',command=self.multi_turn)
 		self.back=Button(self.master,text='Back',command=self.multi_turn)
 		
+		self.quit=Button(self.master,text='Quit',command=self.master.destroy)
+		self.back_menu=Button(self.master,text='Back to menu',command=self.menu)
 
 
 		"tous les labels qui seront utiles par la suite"
+
+		self.champ_label = Label(self.master, text="Bienvenue sur Hanabi",font=("Helvetica", 16))
 
 		self.champ_label2 = Label(self.master, text="These are piles :  " ,font=("Helvetica", 16))
 		self.champ_label3 = Label(self.master, text="Can't clue this ! " ,font=("Helvetica", 16))
@@ -76,9 +70,31 @@ class Application :
 		self.image = Label(self.master, image = self.photo)
 		self.bravo= Label(self.master, text='Well done !', font=("Helvetica",16))
 		self.sad= Label(self.master, text='Maybe next time !', font=("Helvetica",16))
+		self.loss= Label(self.master, text='You loose : 3 red coins !', font=("Helvetica",16))
 
 
+		self.menu()
 		self.master.mainloop()
+		
+
+	def menu(self):
+		"set up du jeu"
+		self.game=hanabi.Game()
+		self.player=0
+		#self.red_coins=0  
+
+		"Maj affichage"
+
+		self.loss.pack_forget()
+		self.back_menu.pack_forget()
+		self.quit.pack_forget()
+		self.sad.pack_forget()
+
+
+		"menu du jeu"
+		self.champ_label.pack()
+		self.single.pack()
+		self.multi.pack()
 
 
 	def verrif_color(self,color):
@@ -109,7 +125,7 @@ class Application :
 	
 
 	def multi_turn(self):
-
+		
 		"affichage texte"
 		remember=self.game.current_hand.str_clue()
 		other_hand=self.game.hands[1]
@@ -124,7 +140,6 @@ class Application :
 		self.champ_label3.pack_forget()
 		self.champ_label4.pack_forget()
 		self.back.pack_forget()
-		#self.image.pack_forget()
 		self.D1.pack()
 		self.D1.pack_forget()
 		self.D2.pack_forget()
@@ -253,11 +268,41 @@ class Application :
 		pile=self.game.piles[card.color]
 		if card.number == pile+1 : 
 			self.bravo.pack()
+			self.game.turn("p1")
+			self.player=(self.player+1)%2
+			self.multi_turn()
+
 		else : 
 			self.sad.pack()
-		self.game.turn("p1")
-		self.player=(self.player+1)%2
-		self.multi_turn()
+			#self.red_coins+=1
+			if self.game.red_coins==2 :
+				print("OK")
+				"MAJ affichage"
+				self.OK.pack_forget()
+				self.champ_label2.pack_forget()
+				self.single.pack_forget()
+				self.multi.pack_forget()
+				self.champ_label.pack_forget()
+				self.champ_label3.pack_forget()
+				self.champ_label4.pack_forget()
+				self.back.pack_forget()
+				self.loss.pack()
+				self.P1.pack_forget()
+				self.P2.pack_forget()
+				self.P3.pack_forget()
+				self.P4.pack_forget()
+				self.P5.pack_forget()
+
+				"boutons"
+				self.quit.pack()
+				self.back_menu.pack()
+			else :
+				self.game.turn("p1")
+				self.player=(self.player+1)%2
+				self.multi_turn()
+
+		
+			
 		
 
 	def p_2(self):
@@ -265,36 +310,160 @@ class Application :
 		pile=self.game.piles[card.color]
 		if card.number == pile+1 : 
 			self.bravo.pack()
-		self.game.turn("p2")
-		self.player=(self.player+1)%2
-		self.multi_turn()
+			self.game.turn("p2")
+			self.player=(self.player+1)%2
+			self.multi_turn()
+
+		else : 
+			self.sad.pack()
+			#self.red_coins+=1
+			if self.game.red_coins==2 :
+				print("OK")
+				"MAJ affichage"
+				self.OK.pack_forget()
+				self.champ_label2.pack_forget()
+				self.single.pack_forget()
+				self.multi.pack_forget()
+				self.champ_label.pack_forget()
+				self.champ_label3.pack_forget()
+				self.champ_label4.pack_forget()
+				self.back.pack_forget()
+				self.loss.pack()
+				self.P1.pack_forget()
+				self.P2.pack_forget()
+				self.P3.pack_forget()
+				self.P4.pack_forget()
+				self.P5.pack_forget()
+
+				"boutons"
+				self.quit.pack()
+				self.back_menu.pack()
+			else :
+				self.game.turn("p2")
+				self.player=(self.player+1)%2
+				self.multi_turn()
+
+		
 
 	def p_3(self):
 		card=self.game.current_hand.cards[2]
 		pile=self.game.piles[card.color]
 		if card.number == pile+1 : 
 			self.bravo.pack()
-		self.game.turn("p3")
-		self.player=(self.player+1)%2
-		self.multi_turn()
+			self.game.turn("p3")
+			self.player=(self.player+1)%2
+			self.multi_turn()
+
+		else : 
+			self.sad.pack()
+			#self.red_coins+=1
+			if self.game.red_coins==2 :
+				print("OK")
+				"MAJ affichage"
+				self.OK.pack_forget()
+				self.champ_label2.pack_forget()
+				self.single.pack_forget()
+				self.multi.pack_forget()
+				self.champ_label.pack_forget()
+				self.champ_label3.pack_forget()
+				self.champ_label4.pack_forget()
+				self.back.pack_forget()
+				self.loss.pack()
+				self.P1.pack_forget()
+				self.P2.pack_forget()
+				self.P3.pack_forget()
+				self.P4.pack_forget()
+				self.P5.pack_forget()
+
+				"boutons"
+				self.quit.pack()
+				self.back_menu.pack()
+			else :
+				self.game.turn("p3")
+				self.player=(self.player+1)%2
+				self.multi_turn()
+
+		
 
 	def p_4(self):
 		card=self.game.current_hand.cards[3]
 		pile=self.game.piles[card.color]
 		if card.number == pile+1 : 
 			self.bravo.pack()
-		self.game.turn("p4")
-		self.player=(self.player+1)%2
-		self.multi_turn()
+			self.game.turn("p4")
+			self.player=(self.player+1)%2
+			self.multi_turn()
+
+		else : 
+			self.sad.pack()
+			#self.red_coins+=1
+			if self.game.red_coins==2 :
+				print("OK")
+				"MAJ affichage"
+				self.OK.pack_forget()
+				self.champ_label2.pack_forget()
+				self.single.pack_forget()
+				self.multi.pack_forget()
+				self.champ_label.pack_forget()
+				self.champ_label3.pack_forget()
+				self.champ_label4.pack_forget()
+				self.back.pack_forget()
+				self.loss.pack()
+				self.P1.pack_forget()
+				self.P2.pack_forget()
+				self.P3.pack_forget()
+				self.P4.pack_forget()
+				self.P5.pack_forget()
+
+				"boutons"
+				self.quit.pack()
+				self.back_menu.pack()
+			else :
+				self.game.turn("p4")
+				self.player=(self.player+1)%2
+				self.multi_turn()
+
+		
 
 	def p_5(self):
 		card=self.game.current_hand.cards[4]
 		pile=self.game.piles[card.color]
 		if card.number == pile+1 : 
 			self.bravo.pack()
-		self.game.turn("p5")
-		self.player=(self.player+1)%2
-		self.multi_turn()
+			self.game.turn("p5")
+			self.player=(self.player+1)%2
+			self.multi_turn()
+
+		else : 
+			self.sad.pack()
+			#self.red_coins+=1
+			if self.game.red_coins==2 :
+				print("OK")
+				"MAJ affichage"
+				self.OK.pack_forget()
+				self.champ_label2.pack_forget()
+				self.single.pack_forget()
+				self.multi.pack_forget()
+				self.champ_label.pack_forget()
+				self.champ_label3.pack_forget()
+				self.champ_label4.pack_forget()
+				self.back.pack_forget()
+				self.loss.pack()
+				self.P1.pack_forget()
+				self.P2.pack_forget()
+				self.P3.pack_forget()
+				self.P4.pack_forget()
+				self.P5.pack_forget()
+
+				"boutons"
+				self.quit.pack()
+				self.back_menu.pack()
+			else :
+				self.game.turn("p5")
+				self.player=(self.player+1)%2
+				self.multi_turn()
+
+		
 	
 	def d_1(self):
 		card=self.game.current_hand.cards[0]
@@ -414,6 +583,5 @@ class Application :
 			self.champ_label3.pack()
 
 
-	
 
 Application()
