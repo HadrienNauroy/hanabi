@@ -86,6 +86,7 @@ class Card:
 class Hand:
     """A Hanabi hand, with n cards, drawn from the deck.
     Also used for the discard pile.
+    In a game of 4 to 5 four cards are to be drawn
     """
     def __init__(self, deck, n=4):
         # TODO: see if it's easier to derive from list
@@ -164,6 +165,7 @@ class Deck:
         for i in range(nhands):
             hands.append(Hand(self, self.cards_by_player[nhands]))
         return hands
+
 
 
 class Game:
