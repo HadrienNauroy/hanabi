@@ -182,8 +182,6 @@ class Basic_ai(AI):
 
 """it seems ok too but not really efficient"""
 
-
-
 class Smarter_ai(AI):
     """
     let's do something better
@@ -222,13 +220,9 @@ class Smarter_ai(AI):
             return"d1"
 """it seems ok too but not really efficient : average score is 2 """
 
-
-class liste_vide(Exception):
-    pass
-
-class Strat1_ai(AI):
-
-    """ Algorithm:
+class Strat1_ai(AI)
+   """"
+    Algorithm:
     1) If the most recent recommendation was to play a card
     and no card has been playedsince the last hint, play the recommended card.
     2) If the most recent recommendation was to play a card, one card has been
@@ -236,9 +230,9 @@ class Strat1_ai(AI):
     3) If the players have a hint token, give a hint.
         cf recommendation algo
     4) If the most recent recommendation was to discard a card, discard the requestedcard.
-    5) Discard card c1
+    5) Discard card c1 """
 
-    """
+
     nb_cards= 4
     nb_players = 5
     actions=[]  #liste des actions jouées pendant la partie la derniere action vient en premier
@@ -251,19 +245,19 @@ class Strat1_ai(AI):
         '''la fonction determine si une carte est indispensable'''
         if card.number == 5:
             return True
-        if card.number == 1 : 
+        if card.number == 1 :
             i=0
             for c in self.game.discard_pile.cards :
-                if c.color == card.color and c.number == card.number : 
+                if c.color == card.color and c.number == card.number :
                     i+=1
             if i>=2 :
                 return True
             else :
                 return False
-        else  : 
+        else  :
             i=0
             for c in self.game.discard_pile.cards :
-                if c.color == card.color and c.number == card.number : 
+                if c.color == card.color and c.number == card.number :
                     i+=1
             if i>=1 :
                 return True
@@ -272,7 +266,7 @@ class Strat1_ai(AI):
 
     def c_i(self, L ):
 
-        
+
         #on joue le 5 playable du plus petit indice en premier
         for k in range(len(L)):
             if L[k].number == 5 and self.game.piles[L[k].color] == 4: #si le 5 est jouable
@@ -289,7 +283,7 @@ class Strat1_ai(AI):
 
         #si y'a une dead card (déjà jouée), on a discard celle de plus petit indice
         for k in range(len(L)):
-            if L[k].number <= self.game.piles[L[k].color]: 
+            if L[k].number <= self.game.piles[L[k].color]:
                 return(4+k)
 
         #on discard la carte de plus haut numéro de plus petit indice et non indispensable
@@ -311,15 +305,42 @@ class Strat1_ai(AI):
         elle doit mettre à jour hand.recommendation pour tous les autres joueurs cad traduire l'indice pour chaque joueur
         FIXME : il faut se mettre a la place de chaque joueurs.
         '''
+        c = self.actions[0]
+        I_see = self.other_players_cards
+        # si c est un clue on peut continuer sinon on ne fait rien
+        if c[0] == 'c':
+            #On explicite g_1 on repasse d'une chaine de charactères à un chiffre entre 0 et 7
+            #Si on a donné un numéro c'est que g_1 est entre 0 et 3
+            if c[1] in (1,2,3,4):
+                g_1 = c[2] -1
+            #Si on a donné une lettre alors g_1 est entre 4 et 7
+            else:
+                g_1 = c[2] +3
+            #maintenant qu'on a g_1 on peut faire le tour des joueurs pour leur donner leur indice
+            for k in range(self.nb_players -1):
+                g_p = 0
+                #il faut exclure le joueur k à qui on explicite l'indice car il ne voit pas ses cartes
+                #et exclure celui qui a donné l'indice
+                #On cherche g_p = g_1 - \sum_{i!=1, i!=p}c_i[8]
+                for i in range(1,k):
+                    L = I_see[self.nb_cards*i:self.nb_cards*(i+1)-1]
+                    g_p += self.c_i(L)
+                for i in range(k+1, nb_players-1):
+                    L = I_see[self.nb_cards*i:self.nb_cards*(i+1)-1]
+                    g_p += self.c_i(L)
+                c_p = (g_1-g_p)%8
+                #maintenant on le transforme en chaine de charactères
+                if c_p <= 3:
+                    self.other_hands[k].recommendation = "p%d"%(c_p+1) + self.other_players_hands[k].recommendation
+                else:
+                    self.other_hands[k].recommendation = "d%d"%(c_p-3) + self.other_players_hands[k].recommendation
 
-
-
-        return "p1" #pour tester mon code
+        #return "p1"
 
     def clue(self):
         '''la fonction renvoie l'indice à donner sous forme de chaine de carctère'''
         g_1 = 0
-        I_see = self.other_players_cards 
+        I_see = self.other_players_cards
 
         #pour chaque joueur
         for k in range(self.nb_players-1):
@@ -328,10 +349,12 @@ class Strat1_ai(AI):
         indice = g_1%8
 
         if indice<4:
-            return("c%d%d"%(self.other_players_cards[(indice)*(self.nb_cards)].number, (indice+1))) #N = Donner un nombre celui de la première carte au hasard à
+            #On donne comme indice la valeur de la première carte du joueur numero (indice)
+            return("c%d%d"%(self.other_players_cards[(indice)*(self.nb_cards)].number, (indice+1)))
         else:
+            #On donne la couleur de la première carte du joueur numero (indice-4)
             clue ="c%s%d" %(self.other_players_cards[(indice-4)*(self.nb_cards)].color ,(indice-3))  #C = Donner une couleur celle de la première carte à
-            clue = clue[:2]+clue[-1] # quick fix, with 3+ players, can't clue cRed2 anymore, only cR2
+            #clue = clue[:2]+clue[-1]  quick fix, with 3+ players, can't clue cRed2 anymore, only cR2
             return(clue)
 
 
@@ -339,8 +362,6 @@ class Strat1_ai(AI):
         if self.actions == [] :
             raise liste_vide(" actions list is empty ")
 
-        if self.actions[0][0] == 'c':
-            return 0
 
         i,n=0,0
         while self.actions[i][0] != 'c':
@@ -354,7 +375,7 @@ class Strat1_ai(AI):
         game=self.game
         """oui """
 
-        #I_see = self.other_players_cards 
+        #I_see = self.other_players_cards
         #print("\n self.pile : ", game.piles, "\n")
         #print("I_see : ", I_see , "\n")
 
