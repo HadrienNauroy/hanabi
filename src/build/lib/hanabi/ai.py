@@ -3,7 +3,7 @@ Artificial Intelligence to play Hanabi.
 """
 
 import itertools
-
+from random import *
 
 class AI:
     """
@@ -135,3 +135,100 @@ class Cheater(AI):
         print('Cheater is doomed and must discard:', act, myprecious)
         return act
 
+
+
+
+class stupid_ai(AI):
+    """
+    let's start with a simple AI
+
+    Algorithm :
+        *play a random card
+    """
+
+    def play(self):
+        game = self.game
+        a=randint(0,4)
+        return"p%d"%a
+
+"""It seems like it's working"""
+
+class basic_ai(AI):
+    """
+    let's do something better
+
+    Algorithm:
+        *if we got two clue on a card play it
+        *if blue_coin>0 give cW clue
+        *if blue_coin<0 discard a card
+
+    """
+
+    def play(self):
+        game=self.game
+
+
+        for k in range(5):
+            if game.current_hand.cards[k].color_clue and game.current_hand.cards[k].number_clue :
+                return"p%d"%k+1 #retour à des indices rééls !
+
+
+        if game.blue_coins > 0:
+            return"cW"
+
+        if game.blue_coins==0 :
+            return"d1"
+
+"""it seems ok too but not really efficient"""
+
+class smarter_ai(AI):
+    """
+    let's do something better
+
+    Algorithm:
+        *if we got two clue on a card and the card is playable play it
+        *if we got two clue on a card and the card is disacrdable : discard it
+        *if blue_coin>0 give a new clue
+        *else discard a random card
+
+    """
+    def play(self):
+        game=self.game
+
+        for k in range(5):
+            if game.current_hand.cards[k].color_clue and game.current_hand.cards[k].number_clue :
+                if game.piles[game.current_hand.cards[k].color]+1 == game.current_hand.cards[k].number :
+                    return"p%d"%(k+1) #retour à des indices rééls !
+                if game.piles[game.current_hand.cards[k].color] >= game.current_hand.cards[k].number :
+                    return"d%d"%(k+1) #idem
+
+        if game.blue_coins > 0 :
+            I_see = [ card for card in self.other_players_cards]
+            print(I_see)
+            for c in I_see :
+                #print(c.color)
+
+                if  not c.color_clue:
+                    clue = "c%s"%c.color
+                    clue = clue[:2] # quick fix, with 3+ players, can't clue cRed anymore, only cR
+                    return clue
+                if not c.number_clue:
+                    return"c%d"%c.number
+
+        else :
+            return"d1"
+"""it seems ok too but not really efficient : average score is 2 """
+
+class Strat1_ai(AI)
+
+    """ Algorithm:
+    1) If the most recent recommendation was to play a card
+    and no card has been playedsince the last hint, play the recommended card.
+    2) If the most recent recommendation was to play a card, one card has been
+    playedsince the hint was given, and the players have made fewer than two errors, play therecommended card
+    3) If the players have a hint token, give a hint.
+        cf recommendation algo
+    4) If the most recent recommendation was to discard a card, discard the requestedcard.
+    5) Discard card c1
+
+    """
