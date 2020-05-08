@@ -220,8 +220,8 @@ class Smarter_ai(AI):
             return"d1"
 """it seems ok too but not really efficient : average score is 2 """
 
-class Strat1_ai(AI)
-   """"
+class Strat1_ai(AI):
+    """"
     Algorithm:
     1) If the most recent recommendation was to play a card
     and no card has been playedsince the last hint, play the recommended card.
@@ -232,9 +232,8 @@ class Strat1_ai(AI)
     4) If the most recent recommendation was to discard a card, discard the requestedcard.
     5) Discard card c1 """
 
-
     nb_cards= 4
-    nb_players = 5
+    nb_players=5
     actions=[]  #liste des actions jouées pendant la partie la derniere action vient en premier
                      #variable de classe mise à jour à chaque utilisation de play
                      #on saura ce que les autres ont fait avant
@@ -264,10 +263,9 @@ class Strat1_ai(AI)
             else :
                 return False
 
+
     def c_i(self, L ):
-
-
-        #on joue le 5 playable du plus petit indice en premier
+       #on joue le 5 playable du plus petit indice en premier
         for k in range(len(L)):
             if L[k].number == 5 and self.game.piles[L[k].color] == 4: #si le 5 est jouable
                 return(k)
@@ -403,3 +401,5 @@ class Strat1_ai(AI)
 
         self.actions = ["d1"] + self.actions  # 5)
         return "d1"
+
+
