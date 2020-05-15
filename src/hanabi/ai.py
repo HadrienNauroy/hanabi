@@ -242,7 +242,15 @@ class Strat1_ai(AI):
     def is_indispensables(self,card):
         '''la fonction determine si une carte est indispensable'''
         if card.number == 5:
-            return True
+            #On ajoute le cas des deux n-1 défaussés pour ajouter de la précision
+            i=0
+            for c in self.game.discard_pile.cards :
+                if c.color == card.color and c.number == card.number-1 :
+                    i+=1
+            if i>= 2:
+                return False
+            else:
+                return True
         if card.number == 1 :
             i=0
             for c in self.game.discard_pile.cards :
@@ -254,11 +262,19 @@ class Strat1_ai(AI):
                 return False
         else  :
             i=0
+            j = 0
             for c in self.game.discard_pile.cards :
                 if c.color == card.color and c.number == card.number :
                     i+=1
-            if i>=1 :
-                return True
+                if c.color == card.color and c.number == card.number-1 :
+                    j+=1
+            if i>=1:
+                if j<=1 :
+                    return True
+                if j==2 and c.number == 2:
+                    return(True)
+                else:
+                    return(False)
             else :
                 return False
 
