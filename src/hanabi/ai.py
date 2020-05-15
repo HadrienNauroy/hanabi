@@ -278,7 +278,29 @@ class Strat1_ai(AI):
             else :
                 return False
 
+    def is_indispensable2(self,card):
+        L = [0 for k in range(card.number)] #On construit L la liste du nombre de cartes
+        #de numéro inférieur ou égale à la carte testée présentes dans la défausse.
+        #Avec k+1 le numéro de la carte
+        saturation = [3, 2, 2, 2, 1] #saturation[k] = nombre de carte de numero k+1 en tout
+        for c in self.game.discard_pile.cards :
+            for k in range(card.number):
+                if c.color == card.color and c.number == card.number-k :
+                    L[card.number-k-1] += 1
+        s = card.number-1
 
+        #premier test: si elle n'est pas la dernière carte existante elle n'est pas indispensable
+        if L[s] == saturation[card.number - 1]-1:
+            A = True
+        else:
+            return(False)
+        #ensuite on teste un par un les cas de nombre inférieur
+        while s>0:
+            s--
+            if L[s] == saturation[s]:
+                A = False
+        return(A)
+        
     def c_i(self, L ):
        #on joue le 5 playable du plus petit indice en premier
         for k in range(len(L)):
