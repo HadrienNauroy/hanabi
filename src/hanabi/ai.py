@@ -220,9 +220,9 @@ class Smarter_ai(AI):
             return"d1"
 """it seems ok too but not really efficient : average score is 2 """
 
-class Strat1_ai(AI)
-
-""""Algorithm:
+class Strat1_ai(AI):
+    """"
+    Algorithm:
     1) If the most recent recommendation was to play a card
     and no card has been playedsince the last hint, play the recommended card.
     2) If the most recent recommendation was to play a card, one card has been
@@ -231,8 +231,9 @@ class Strat1_ai(AI)
         cf recommendation algo
     4) If the most recent recommendation was to discard a card, discard the requestedcard.
     5) Discard card c1 """
+
     nb_cards= 4
-    nb_players = 5
+    nb_players=5
     actions=[]  #liste des actions jouées pendant la partie la derniere action vient en premier
                      #variable de classe mise à jour à chaque utilisation de play
                      #on saura ce que les autres ont fait avant
@@ -261,10 +262,9 @@ class Strat1_ai(AI)
             else :
                 return False
 
+
     def c_i(self, L ):
-
-
-        #on joue le 5 playable du plus petit indice en premier
+       #on joue le 5 playable du plus petit indice en premier
         for k in range(len(L)):
             if L[k].number == 5 and self.game.piles[L[k].color] == 4: #si le 5 est jouable
                 return(k)
@@ -308,11 +308,11 @@ class Strat1_ai(AI)
         if c[0] == 'c':
             #On explicite g_1 on repasse d'une chaine de charactères à un chiffre entre 0 et 7
             #Si on a donné un numéro c'est que g_1 est entre 0 et 3
-            if c[1] in (1,2,3,4):
-                g_1 = c[2] -1
+            if c[1] in ['1','2','3','4']:
+                g_1 = int(c[2]) -1
             #Si on a donné une lettre alors g_1 est entre 4 et 7
             else:
-                g_1 = c[2] +3
+                g_1 = int(c[2]) +3
             #maintenant qu'on a g_1 on peut faire le tour des joueurs pour leur donner leur indice
             for k in range(self.nb_players -1):
                 g_p = 0
@@ -322,15 +322,15 @@ class Strat1_ai(AI)
                 for i in range(1,k):
                     L = I_see[self.nb_cards*i:self.nb_cards*(i+1)-1]
                     g_p += self.c_i(L)
-                for i in range(k+1, nb_players-1):
+                for i in range(k+1, self.nb_players-1):
                     L = I_see[self.nb_cards*i:self.nb_cards*(i+1)-1]
                     g_p += self.c_i(L)
                 c_p = (g_1-g_p)%8
                 #maintenant on le transforme en chaine de charactères
                 if c_p <= 3:
-                    self.other_hands[k].recommendation = "p%d"%(c_p+1) + self.other_players_hands[k].recommendation
+                    self.other_hands[k].recommendation = ["p%d"%(c_p+1)] + self.other_hands[k].recommendation
                 else:
-                    self.other_hands[k].recommendation = "d%d"%(c_p-3) + self.other_players_hands[k].recommendation
+                    self.other_hands[k].recommendation = ["d%d"%(c_p-3)] + self.other_hands[k].recommendation
 
         #return "p1"
 
@@ -377,11 +377,11 @@ class Strat1_ai(AI)
         #print("I_see : ", I_see , "\n")
 
         if game.current_hand.recommendation[0][0] == 'p': #si la dernière recommendation est de jouer
-            if played_since_hint() == 0 : #si personne n'a joué depuis l'indice  1)
+            if self.played_since_hint() == 0 : #si personne n'a joué depuis l'indice  1)
                 self.actions=[game.current_hand.recommendation[0]] + self.actions  #maj de actions avant le return
                 return game.current_hand.recommendation[0]
 
-            if played_since_hint() == 1 : #si 1 personne a joué depuis l'indices   2)
+            if self.played_since_hint() == 1 : #si 1 personne a joué depuis l'indices   2)
                 if self.game.red_coins<2:
                     self.actions=[game.current_hand.recommendation[0]] + self.actions  #maj de actions avant le return
                     return game.current_hand.recommendation[0]

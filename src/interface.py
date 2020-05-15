@@ -8,6 +8,7 @@ import hanabi
 
 	
 class Application : 
+	
 
 	def __init__(self): 
 
