@@ -221,8 +221,8 @@ class Smarter_ai(AI):
 """it seems ok too but not really efficient : average score is 2 """
 
 class Strat1_ai(AI)
-   """"
-    Algorithm:
+
+""""Algorithm:
     1) If the most recent recommendation was to play a card
     and no card has been playedsince the last hint, play the recommended card.
     2) If the most recent recommendation was to play a card, one card has been
@@ -231,15 +231,12 @@ class Strat1_ai(AI)
         cf recommendation algo
     4) If the most recent recommendation was to discard a card, discard the requestedcard.
     5) Discard card c1 """
-
-
     nb_cards= 4
     nb_players = 5
     actions=[]  #liste des actions jouées pendant la partie la derniere action vient en premier
                      #variable de classe mise à jour à chaque utilisation de play
                      #on saura ce que les autres ont fait avant
                      #liste de chaines de carctères
-
 
     def is_indispensables(self,card):
         '''la fonction determine si une carte est indispensable'''
