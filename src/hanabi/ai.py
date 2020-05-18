@@ -239,18 +239,20 @@ class Strat1_ai(AI):
                      #on saura ce que les autres ont fait avant
                      #liste de chaines de carctères
 
-    def is_indispensables(self,card):
-        '''la fonction determine si une carte est indispensable'''
+    def is_indispensable(self,card):
+        """ Cette fonction vérifie si la carte est indispensable
+        c'est à dire que si celle-ci est la seule de sa catégorie"""
         if card.number == 5:
-            #On ajoute le cas des deux n-1 défaussés pour ajouter de la précision.
-            i=0
-            for c in self.game.discard_pile.cards :
-                if c.color == card.color and c.number == card.number-1 :
-                    i+=1
-            if i>= 2:
-                return False
-            else:
-                return True
+            #décommenter pour le cas des deux n-1 défaussés pour ajouter de la précision.
+            #i=0
+            #for c in self.game.discard_pile.cards :
+                #if c.color == card.color and c.number == card.number-1 :
+                    #i+=1
+            #if i>= 2:
+                #return False
+            #else:
+                #return True
+            return(True)
         if card.number == 1 :
             i=0
             for c in self.game.discard_pile.cards :
@@ -262,23 +264,29 @@ class Strat1_ai(AI):
                 return False
         else  :
             i=0
-            j = 0
+            #j = 0
             for c in self.game.discard_pile.cards :
                 if c.color == card.color and c.number == card.number :
                     i+=1
-                if c.color == card.color and c.number == card.number-1 :
-                    j+=1
+                #if c.color == card.color and c.number == card.number-1 :
+                    #j+=1
             if i>=1:
-                if j<=1 :
+                #if j<=1 :
                     return True
-                if j==2 and c.number == 2:
-                    return(True)
-                else:
-                    return(False)
+                #if j==2 and c.number == 2:
+                    #return(True)
+                #else:
+                    #return(False)
             else :
                 return False
 
     def is_indispensable2(self,card):
+        """ Cette fonction vérifie si la carte est indispensable
+        c'est à dire si celle-ci est la seule de sa catégorie (même nombre, même couleur)
+        mais elle vérifie aussi si d'autres cartes de la même couleur
+        ont été défaussées jusqu'à ce qu'il n'y ait plus aucune de ces cartes.
+        La carte est alors moins que non indispensable elle est inutile. 
+        """
         L = [0 for k in range(card.number)] #On construit L la liste du nombre de cartes
         #de numéro inférieur ou égale à la carte testée présentes dans la défausse.
         #Avec k+1 le numéro de la carte
@@ -302,6 +310,17 @@ class Strat1_ai(AI):
         return(A)
 
     def c_i(self, L ):
+        """La fonction c_i permet d'attribuer un chiffre modulo 8 à une main.
+        Elle prend en argument la main d'un joueur sous forme de liste de card
+        et renvoie un chiffre entre 0 et 7.
+
+        Cette fonction permet au donneur d'indice, en sommant les
+        c_i de chaque main, de donner un indice à chaque joueur de la table
+        selon le principe du hat gessing.
+
+        Cette fonction permet aussi aux joueurs de décoder l'indice donné en
+        additionnant les c_i des autres joueurs (sauf celui du donneur d'indice)
+        """
        #on joue le 5 playable du plus petit indice en premier
         for k in range(len(L)):
             if L[k].number == 5 and self.game.piles[L[k].color] == 4: #si le 5 est jouable
@@ -324,12 +343,12 @@ class Strat1_ai(AI):
         #on discard la carte de plus haut numéro de plus petit indice et non indispensable
         m, l = 0 , len(L)+1 #FIXME : j 'ai rien compris à celui la
         for k in range(len(L)):
-            if L[k].number > m and not self.is_indispensables(L[k]):  #si on a une carte plus grand non indispensable
+            if L[k].number > m and self.is_indispensables(L[k]) == False:  #si on a une carte plus grand non indispensable
                                                                        #la condition indice plus grand est implicite avec la boucle
                 m = L[k].number
                 l = k
         if m!= 0 and l!= len(L)+1:
-            return(k+4)
+            return(l+4)
 
         #On discard c1
         return(4)
@@ -337,8 +356,9 @@ class Strat1_ai(AI):
     def from_clue_to_play(self):
         '''
         la fonction est lancée au moment où le joueur donne l'indice.
-        elle doit mettre à jour hand.recommendation pour tous les autres joueurs cad traduire l'indice pour chaque joueur
-        FIXME : il faut se mettre a la place de chaque joueurs.
+        elle doit mettre à jour hand.recommendation pour tous les autres joueurs
+        cad traduire l'indice pour chaque joueur
+
         '''
         c = self.actions[0]
         I_see = self.other_players_cards
@@ -370,7 +390,7 @@ class Strat1_ai(AI):
                 else:
                     self.other_hands[k].recommendation = ["d%d"%(c_p-3)] + self.other_hands[k].recommendation
 
-        #return "p1"
+
 
     def clue(self):
         '''la fonction renvoie l'indice à donner sous forme de chaine de carctère'''

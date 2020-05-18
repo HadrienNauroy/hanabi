@@ -27,6 +27,7 @@ t3=hanabi.deck.Card(Green,5)
 t4=hanabi.deck.Card(Red,5)
 t5=hanabi.deck.Card(White,3)
 t6=hanabi.deck.Card(White,5)
+t7=hanabi.deck.Card(Blue, 5)
 
 
 "cas test de is_indispensable2"
@@ -43,6 +44,8 @@ if not(ai.is_indispensable2(t5)) : print("test 5 OK")
 else: print("test 5 not OK ")
 if not(ai.is_indispensable2(t6)) : print("test 6 OK")
 else: print("test 6 not OK ")
+if not(ai.is_indispensable2(t6)) : print("test 6bis OK")
+else: print("test 6bis not OK ")
 
 "cas test de c_i"
 
@@ -59,8 +62,8 @@ card4 = hanabi.deck.Card(Blue, 5)
 L = [card1, card2, card3, card4]
 
 card6 = hanabi.deck.Card(Red, 4)
-card7 = hanabi.deck.Card(Yellow, 4)
-card8 = hanabi.deck.Card(Red, 2)
+card7 = hanabi.deck.Card(Yellow, 5)
+card8 = hanabi.deck.Card(Green, 3)
 card9 = hanabi.deck.Card(Blue, 5)
 L2 = [card6, card7, card8, card9]
 
@@ -72,7 +75,7 @@ L3 = [card11, card12, card13, card14]
 
 card15 = hanabi.deck.Card(Blue, 2)
 card16 = hanabi.deck.Card(White, 5)
-card17 = hanabi.deck.Card(Red, 2)
+card17 = hanabi.deck.Card(White, 4)
 card18 = hanabi.deck.Card(Blue, 5)
 L4 = [card15, card16, card17, card18]
 
