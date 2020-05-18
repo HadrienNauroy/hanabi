@@ -300,9 +300,8 @@ class Strat1_ai(AI):
             if L[s] == saturation[s]:
                 A = False
         return(A)
-        
+
     def c_i(self, L ):
-        '''determine le ci de la méthode de hat guessing'''
        #on joue le 5 playable du plus petit indice en premier
         for k in range(len(L)):
             if L[k].number == 5 and self.game.piles[L[k].color] == 4: #si le 5 est jouable
@@ -325,7 +324,7 @@ class Strat1_ai(AI):
         #on discard la carte de plus haut numéro de plus petit indice et non indispensable
         m, l = 0 , len(L)+1 #FIXME : j 'ai rien compris à celui la
         for k in range(len(L)):
-            if L[k].number > m and not self.is_indispensable2(L[k]):  #si on a une carte plus grand non indispensable
+            if L[k].number > m and not self.is_indispensables(L[k]):  #si on a une carte plus grand non indispensable
                                                                        #la condition indice plus grand est implicite avec la boucle
                 m = L[k].number
                 l = k
@@ -409,7 +408,7 @@ class Strat1_ai(AI):
 
     def play(self):
         game=self.game
-        """La fonction joue une carte selon la strategie de hat guessing """
+        """oui """
 
         #I_see = self.other_players_cards
         #print("\n self.pile : ", game.piles, "\n")
@@ -439,7 +438,3 @@ class Strat1_ai(AI):
 
         self.actions = ["d1"] + self.actions  # 5)
         return "d1"
-
-
-
-

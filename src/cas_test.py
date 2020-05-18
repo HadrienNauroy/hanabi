@@ -47,4 +47,41 @@ else: print("test 6 not OK ")
 "cas test de c_i"
 
 game.piles[Green]=2
-game.piles[yellow]=3
+game.piles[Yellow]=4
+game.piles[White] = 1
+game.piles[Red]= 4
+game.piles[Blue] = 0
+
+card1 = hanabi.deck.Card(Red, 5)
+card2 = hanabi.deck.Card(Yellow, 5)
+card3 = hanabi.deck.Card(Red, 2)
+card4 = hanabi.deck.Card(Blue, 5)
+L = [card1, card2, card3, card4]
+
+card6 = hanabi.deck.Card(Red, 4)
+card7 = hanabi.deck.Card(Yellow, 4)
+card8 = hanabi.deck.Card(Red, 2)
+card9 = hanabi.deck.Card(Blue, 5)
+L2 = [card6, card7, card8, card9]
+
+card11 = hanabi.deck.Card(Blue, 2)
+card12 = hanabi.deck.Card(Yellow, 2)
+card13 = hanabi.deck.Card(Red, 2)
+card14 = hanabi.deck.Card(Blue, 5)
+L3 = [card11, card12, card13, card14]
+
+card15 = hanabi.deck.Card(Blue, 2)
+card16 = hanabi.deck.Card(White, 5)
+card17 = hanabi.deck.Card(Red, 2)
+card18 = hanabi.deck.Card(Blue, 5)
+L4 = [card15, card16, card17, card18]
+
+
+if ai.c_i(L) == 0: print("test 7 ok <3 (play le 5 avec l'indice le plus bas)")
+else: print("test 7 not ok :(")
+if ai.c_i(L2) == 2: print("test 8 ok <3 (play le plus petit nombre de plus petit indice jouable)")
+else: print("test 8 not ok :(")
+if ai.c_i(L3) == 5: print("test 9 ok <3 (discard la dead card d'incide le plus faible )")
+else: print("test 9 not ok :(")
+if ai.c_i(L4) == 5: print("test 10 ok <3 (discard la carte de plus haut nombre pas indispensable) ")
+else: print("test 9 not ok :(")
