@@ -240,8 +240,12 @@ class Strat1_ai(AI):
                      #liste de chaines de carctères
 
     def is_indispensable(self,card):
-        """ Cette fonction vérifie si la carte est indispensable
-        c'est à dire que si celle-ci est la seule de sa catégorie"""
+        '''la fonction determine si une carte est indispensable, au sens faible
+        c'est à dire si il n'existe aucune carte comme celle ci dans le deck
+        (même couleur même nombre)
+        il s'agit d'un premier jet, la fonction is_indispensable2 est mieux.
+        On garde cette version pour faire la différence des deux pour savoir rapidement si une carte est dead.
+        si on avait du temps on coderai des listes pour gerer les deads cards et les indispensables mais il faudrai changer la structure du code.'''
         if card.number == 5:
             #décommenter pour le cas des deux n-1 défaussés pour ajouter de la précision.
             #i=0
@@ -285,7 +289,7 @@ class Strat1_ai(AI):
         c'est à dire si celle-ci est la seule de sa catégorie (même nombre, même couleur)
         mais elle vérifie aussi si d'autres cartes de la même couleur
         ont été défaussées jusqu'à ce qu'il n'y ait plus aucune de ces cartes.
-        La carte est alors moins que non indispensable elle est inutile. 
+        La carte est alors moins que non indispensable elle est inutile.
         """
         L = [0 for k in range(card.number)] #On construit L la liste du nombre de cartes
         #de numéro inférieur ou égale à la carte testée présentes dans la défausse.
@@ -414,6 +418,7 @@ class Strat1_ai(AI):
 
 
     def played_since_hint(self):
+        '''la fonction répond à la question : Une carte à-t-elle été joué depuis que l'on m'a donné un indice (curreent hand.recommendation)'''
         if self.actions == [] :
             raise liste_vide(" actions list is empty ")
 
@@ -428,7 +433,8 @@ class Strat1_ai(AI):
 
     def play(self):
         game=self.game
-        """oui """
+        '''la fonction qui "repond" au jeu selon l'algorithme de la classe
+            après avoir joué on met a jour la liste actions et si besoin est on appelle from_clue_to_play '''
 
         #I_see = self.other_players_cards
         #print("\n self.pile : ", game.piles, "\n")
