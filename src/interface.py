@@ -45,6 +45,7 @@ class Application :
 		self.C2=Button(self.master,text='Clue 2',command=self.c_2)
 		self.C3=Button(self.master,text='Clue 3',command=self.c_3)
 		self.C4=Button(self.master,text='Clue 4',command=self.c_4)
+		self.C4bis=Button(self.master,text='Clue 5',command=self.c_5)
 		self.C5=Button(self.master,text='Clue Red',command=self.c_R)
 		self.C6=Button(self.master,text='Clue White',command=self.c_W)
 		self.C7=Button(self.master,text='Clue Green',command=self.c_G)
@@ -169,6 +170,7 @@ class Application :
 		self.C2.pack_forget()
 		self.C3.pack_forget()
 		self.C4.pack_forget()
+		self.C4bis.pack_forget()
 		self.C5.pack_forget()
 		self.C6.pack_forget()
 		self.C7.pack_forget()
@@ -278,6 +280,7 @@ class Application :
 			self.C2.pack()
 			self.C3.pack()
 			self.C4.pack()
+			self.C4bis.pack()
 			self.C5.pack()
 			self.C6.pack()
 			self.C7.pack()
@@ -576,6 +579,15 @@ class Application :
 			self.multi_turn()
 		else : 
 			self.champ_label3.pack()
+
+	def c_5(self):
+		if ( self.verrif_number(5)):
+			self.game.turn("c5")
+			self.player=(self.player+1)%2
+			self.multi_turn()
+		else : 
+			self.champ_label3.pack()
+			
 			
 
 	def c_R(self):
