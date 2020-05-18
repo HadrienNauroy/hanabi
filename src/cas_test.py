@@ -78,10 +78,19 @@ L4 = [card15, card16, card17, card18]
 
 
 if ai.c_i(L) == 0: print("test 7 ok <3 (play le 5 avec l'indice le plus bas)")
-else: print("test 7 not ok :(")
+else:
+     print("test 7 not ok :(")
+     print(ai.c_i(L))
+
 if ai.c_i(L2) == 2: print("test 8 ok <3 (play le plus petit nombre de plus petit indice jouable)")
-else: print("test 8 not ok :(")
+else:
+    print("test 8 not ok :(")
+    print(ai.c_i(L2))
 if ai.c_i(L3) == 5: print("test 9 ok <3 (discard la dead card d'incide le plus faible )")
-else: print("test 9 not ok :(")
+else:
+    print("test 9 not ok :(")
+    print(ai.c_i(L3))
 if ai.c_i(L4) == 5: print("test 10 ok <3 (discard la carte de plus haut nombre pas indispensable) ")
-else: print("test 9 not ok :(")
+else:
+    print("test 10 not ok :(")
+    print(ai.c_i(L4))
