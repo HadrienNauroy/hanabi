@@ -72,7 +72,7 @@ L3 = [card11, card12, card13, card14]
 
 card15 = hanabi.deck.Card(Blue, 2)
 card16 = hanabi.deck.Card(White, 5)
-card17 = hanabi.deck.Card(Red, 2)
+card17 = hanabi.deck.Card(White, 4)
 card18 = hanabi.deck.Card(Blue, 5)
 L4 = [card15, card16, card17, card18]
 

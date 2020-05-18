@@ -239,8 +239,11 @@ class Strat1_ai(AI):
                      #on saura ce que les autres ont fait avant
                      #liste de chaines de carctères
 
-    def is_indispensables(self,card):
-        '''la fonction determine si une carte est indispensable'''
+    def is_indispensable(self,card):
+        '''la fonction determine si une carte est indispensable, au sens faible
+        il s'agit d'un premier jet, la fonction is_indispensable2 est mieux. 
+        On garde cette version pour faire la différence des deux pour savoir rapidement si une carte est dead.
+        si on avait du temps on coderai des listes pour gerer les deads cards et les indispensables mais il faudrai changer la structure du code.'''
         if card.number == 5:
             #On ajoute le cas des deux n-1 défaussés pour ajouter de la précision.
             i=0
@@ -325,11 +328,11 @@ class Strat1_ai(AI):
         m, l = 0 , len(L)+1 #FIXME : j 'ai rien compris à celui la
         for k in range(len(L)):
             if L[k].number > m and not self.is_indispensables(L[k]):  #si on a une carte plus grand non indispensable
-                                                                       #la condition indice plus grand est implicite avec la boucle
+                                                                      #la condition indice plus grand est implicite avec la boucle
                 m = L[k].number
                 l = k
         if m!= 0 and l!= len(L)+1:
-            return(k+4)
+            return(l+4)
 
         #On discard c1
         return(4)
@@ -394,6 +397,7 @@ class Strat1_ai(AI):
 
 
     def played_since_hint(self):
+        '''la fonction répond à la question : Une carte à-t-elle été joué depuis que l'on m'a donné un indice (curreent hand.recommendation)'''
         if self.actions == [] :
             raise liste_vide(" actions list is empty ")
 
@@ -408,7 +412,8 @@ class Strat1_ai(AI):
 
     def play(self):
         game=self.game
-        """oui """
+        '''la fonction qui "repond" au jeu selon l'algorithme de la classe
+            après avoir joué on met a jour la liste actions et si besoin est on appelle from_clue_to_play '''
 
         #I_see = self.other_players_cards
         #print("\n self.pile : ", game.piles, "\n")
