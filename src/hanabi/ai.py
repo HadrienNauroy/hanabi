@@ -238,6 +238,7 @@ class Strat1_ai(AI):
                      #variable de classe mise à jour à chaque utilisation de play
                      #on saura ce que les autres ont fait avant
                      #liste de chaines de carctères
+    dead_card = []
 
     def is_indispensable(self,card):
         '''la fonction determine si une carte est indispensable, au sens faible
@@ -370,6 +371,7 @@ class Strat1_ai(AI):
         if c[0] == 'c':
             #On explicite g_1 on repasse d'une chaine de charactères à un chiffre entre 0 et 7
             #Si on a donné un numéro c'est que g_1 est entre 0 et 3
+
             if c[1] in ['1','2','3','4']:
                 g_1 = int(c[2]) -1
             #Si on a donné une lettre alors g_1 est entre 4 et 7
@@ -418,7 +420,7 @@ class Strat1_ai(AI):
 
 
     def played_since_hint(self):
-        '''la fonction répond à la question : Une carte à-t-elle été joué depuis que l'on m'a donné un indice (curreent hand.recommendation)'''
+        '''la fonction répond à la question : Une carte à-t-elle été joué depuis que l'on m'a donné un indice (current hand.recommendation)'''
         if self.actions == [] :
             raise liste_vide(" actions list is empty ")
 
@@ -443,11 +445,13 @@ class Strat1_ai(AI):
         if game.current_hand.recommendation[0][0] == 'p': #si la dernière recommendation est de jouer
             if self.played_since_hint() == 0 : #si personne n'a joué depuis l'indice  1)
                 self.actions=[game.current_hand.recommendation[0]] + self.actions  #maj de actions avant le return
+                #self.dead_card += [ game.current_hand[game.current_hand.recommendation[0][1]-1]]
                 return game.current_hand.recommendation[0]
 
             if self.played_since_hint() == 1 : #si 1 personne a joué depuis l'indices   2)
                 if self.game.red_coins<2:
                     self.actions=[game.current_hand.recommendation[0]] + self.actions  #maj de actions avant le return
+                    #self.dead_card += [ game.current_hand[game.current_hand.recommendation[0][1]-1]]
                     return game.current_hand.recommendation[0]
 
 
@@ -460,6 +464,12 @@ class Strat1_ai(AI):
 
         if game.current_hand.recommendation[0][0] == 'd': #si la dernière recommendation est de defausser 4)
             actions = [game.current_hand.recommendation[0]] + actions
+            #card = game.current_hand[game.current_hand.recommendation[0][1]-1]
+            #if card.is_indispensable2 == True:
+                #for k in range(card.number,5):
+                    #carddead.number = k
+                    #carddead.color = card.color
+                    #self.dead_card += [carddead]
             return game.current_hand.recommendation[0]
 
         self.actions = ["d1"] + self.actions  # 5)
