@@ -333,10 +333,10 @@ class Strat1_ai(AI):
         #si pas de 5 on met le plus petit numéro playable de plus petit indice
         m,l = 6, len(L)+1
         for k in range(len(L)):
-            if (self.game.piles[L[k].color] == L[k].number +1) and (L[k].number <m) :  #si jouable et meilleur
+            if (self.game.piles[L[k].color] == L[k].number -1) and (L[k].number <m) :  #si jouable et meilleur
                 m = L[k].number
                 l = k
-        if m!=6 and l != len(L)+1:  #FIXME je comprends pas bien cette double condition !
+        if m!=6 :
             return(l)
 
         #si y'a une dead card (déjà jouée), on a discard celle de plus petit indice
@@ -347,7 +347,7 @@ class Strat1_ai(AI):
         #on discard la carte de plus haut numéro de plus petit indice et non indispensable
         m, l = 0 , len(L)+1 #FIXME : j 'ai rien compris à celui la
         for k in range(len(L)):
-            if L[k].number > m and self.is_indispensable2(L[k]) == False:  #si on a une carte plus grand non indispensable
+            if L[k].number > m and self.is_indispensable2(L[k]) == False:  #si on a une carte plus grande non indispensable
                                                                        #la condition indice plus grand est implicite avec la boucle
                 m = L[k].number
                 l = k

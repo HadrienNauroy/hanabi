@@ -62,9 +62,9 @@ card4 = hanabi.deck.Card(Blue, 5)
 L = [card1, card2, card3, card4]
 
 card6 = hanabi.deck.Card(Red, 4)
-card7 = hanabi.deck.Card(Yellow, 5)
+card7 = hanabi.deck.Card(Yellow, 4)
 card8 = hanabi.deck.Card(Green, 3)
-card9 = hanabi.deck.Card(Blue, 5)
+card9 = hanabi.deck.Card(Blue, 1)
 L2 = [card6, card7, card8, card9]
 
 card11 = hanabi.deck.Card(Blue, 2)
@@ -85,7 +85,7 @@ else:
      print("test 7 not ok :(")
      print(ai.c_i(L))
 
-if ai.c_i(L2) == 2: print("test 8 ok <3 (play le plus petit nombre de plus petit indice jouable)")
+if ai.c_i(L2) == 3: print("test 8 ok <3 (play le plus petit nombre de plus petit indice jouable)")
 else:
     print("test 8 not ok :(")
     print(ai.c_i(L2))
