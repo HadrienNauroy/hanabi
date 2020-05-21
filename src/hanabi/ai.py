@@ -384,10 +384,10 @@ class Strat1_ai(AI):
                 #et exclure celui qui a donné l'indice
                 #On cherche g_p = g_1 - \sum_{i!=1, i!=p}c_i[8]
                 for i in range(0,k):
-                    L = I_see[self.nb_cards*i:self.nb_cards*(i+1)-1]
+                    L = other_hands[k].cards
                     g_p += self.c_i(L)
                 for i in range(k+1, self.nb_players-1):
-                    L = I_see[self.nb_cards*i:self.nb_cards*(i+1)-1]
+                    L = other_hands[k].cards
                     g_p += self.c_i(L)
                 c_p = (g_1-g_p)%8
                 #maintenant on le transforme en chaine de charactères
@@ -404,7 +404,7 @@ class Strat1_ai(AI):
         I_see = self.other_players_cards
         #pour chaque joueur
         for k in range(self.nb_players-1):
-            L=I_see[self.nb_cards*k : self.nb_cards*(k+1)]
+            L=other_hands[k].cards
             g_1+= self.c_i(L) #on calcul ci
         indice = g_1%8
         print(indice)
