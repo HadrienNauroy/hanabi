@@ -6,18 +6,18 @@ Nous avons fait le choix de nous intéresser au document sur le  [hat guessing](
 
 Pour simplifier la lecture du code et pour se repartir aisément le travail nous avons decider de fragmenter le plus possible le code en sous fonctions. La fonction `play`se réduit alors à quelques lignes qui appelent les autres fonctions.
 
-## Hand.recommentation
+## Hand.recommendation
 
-La stratégie de hat guessing que l'on a retenu necessite que chaque joueur retienne la derrnière recommendation qui lui a été donné plus que l'indice puisque ce dernier ne correspond à rien. Nous avons donc ajouté un élément à la classe `Hand` : l'argument `hand.recomendation` qui contient la dernière recommendation. 
+La stratégie de hat guessing que l'on a retenu necessite que chaque joueur retienne la dernière recommandation qui lui a été donné plus que l'indice puisque ce dernier ne correspond à rien. Nous avons donc ajouté un élément à la classe `Hand` : l'argument `hand.recommendation` qui contient la dernière recommandation. 
 
 ## Actions
 
-La strategie que nous avons retenu necessite aussi que les joueurs se souviennent des actions précédentes pour modeliser ce souvenir nous avons créer une variable de classe dans `Strat1.ai` appelée `actions` et qui n'est rien d'autre qu'une liste contenant toutes les actions efféctuées par les joueurs. Il était inutile de démultiplier cette information et de la placer dans les différentes mains des joueurs, la variable de classe paraissait alors adaptée à la situation et s'apparente à un savoir collectif.
+La strategie que nous avons retenu necessite aussi que les joueurs se souviennent des actions précédentes pour modeliser ce souvenir nous avons créé une variable de classe dans `Strat1.ai` appelée `actions` et qui n'est rien d'autre qu'une liste contenant toutes les actions efféctuées par les joueurs. Il était inutile de démultiplier cette information et de la placer dans les différentes mains des joueurs, la variable de classe paraissait alors adaptée à la situation et s'apparente à un savoir collectif.
 
 ## La fonction c_i
-Un des éléments important de la stratégie de recommendation est de déterminer le coefficient ci donné à chanque mains. Nous avons décidé de créer une fonction dédier à ce calcul. Nous l'avons simplement nommé `c_i`.
+Un des éléments important de la stratégie de recommandation est de déterminer le coefficient ci donné à chanque mains. Nous avons décidé de créer une fonction dédier à ce calcul. Nous l'avons simplement nommé `c_i`.
 
-La fonction c_i permet d'attribuer un chiffre modulo 8 à une main correspondant à la recommendation qui lui est donnée.
+La fonction c_i permet d'attribuer un chiffre modulo 8 à une main correspondant à la recommandation qui lui est donnée.
 Elle prend en argument la main d'un joueur sous forme de liste de card
 et renvoie un chiffre entre 0 et 7.
 
