@@ -192,11 +192,11 @@ Pour tester la fin de la partie et le menu de fin, nous avons créé un bouton s
 
 # Statistiques
 
-Le fichier `get_data.py` permet de tester sur un grand nombre de parties l'éfficaciter de l'ai que nous avons codé. Il lance 1000 parties calcul la moyenne et résume les résultats dans un histograme. 
+Le fichier `get_data.py` permet de tester sur un grand nombre de parties l'efficacité de l'ai que nous avons codé. Il lance 1000 parties calcul la moyenne et résume les résultats dans un histograme. 
 
-Le score moyen après 1000 parties est 22.24 et la répartition des scores est la suivante :
+Le score moyen après 1000 parties est 22.26 et la répartition des scores est la suivante :
 
-![resultats](result.png)
+![resultats](resultfin.png)
 
 
 # Conclusion et perspectives
