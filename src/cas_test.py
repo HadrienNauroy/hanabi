@@ -99,10 +99,14 @@ else:
     print(ai.c_i(L4))
 
 print("Test clue ")
-hanabi.deck.other_players_cards = L + L2 + L3 + L4
+print(L)
+ai.other_hands[0].cards = L
+ai.other_hands[1].cards = L2
+ai.other_hands[2].cards = L3
+ai.other_hands[3].cards = L4
 c = ai.clue()
 
-if c != 'cB2':
+if c != 'cR2':
     print("Test clue faux, on trouve:")
     print(c)
 else:

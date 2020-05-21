@@ -383,7 +383,7 @@ class Strat1_ai(AI):
                 #il faut exclure le joueur k à qui on explicite l'indice car il ne voit pas ses cartes
                 #et exclure celui qui a donné l'indice
                 #On cherche g_p = g_1 - \sum_{i!=1, i!=p}c_i[8]
-                for i in range(1,k):
+                for i in range(0,k):
                     L = I_see[self.nb_cards*i:self.nb_cards*(i+1)-1]
                     g_p += self.c_i(L)
                 for i in range(k+1, self.nb_players-1):
@@ -402,19 +402,19 @@ class Strat1_ai(AI):
         '''la fonction renvoie l'indice à donner sous forme de chaine de carctère'''
         g_1 = 0
         I_see = self.other_players_cards
-
         #pour chaque joueur
         for k in range(self.nb_players-1):
-            L=I_see[self.nb_cards*k : self.nb_cards*(k+1)-1]
+            L=I_see[self.nb_cards*k : self.nb_cards*(k+1)]
             g_1+= self.c_i(L) #on calcul ci
         indice = g_1%8
+        print(indice)
 
         if indice<4:
             #On donne comme indice la valeur de la première carte du joueur numero (indice)
             return("c%d%d"%(self.other_players_cards[(indice)*(self.nb_cards)].number, (indice+1)))
         else:
             #On donne la couleur de la première carte du joueur numero (indice-4)
-            clue ="c%s%d" %(self.other_players_cards[(indice-4)*(self.nb_cards)] ,(indice-3))  #C = Donner une couleur celle de la première carte à
+            clue ="c%s%d" %(self.other_players_cards[(indice-4)*(self.nb_cards)].color ,(indice-3))  #C = Donner une couleur celle de la première carte à
             clue = clue[:2]+clue[-1]  #quick fix, with 3+ players, can't clue cRed2 anymore, only cR2
             return(clue)
 
@@ -446,7 +446,7 @@ class Strat1_ai(AI):
             if self.played_since_hint() == 0 : #si personne n'a joué depuis l'indice  1)
                 self.actions=[game.current_hand.recommendation[0]] + self.actions  #maj de actions avant le return
                 self.dead_card += [ game.current_hand[game.current_hand.recommendation[0][1]-1]]
-                
+
                 return game.current_hand.recommendation[0]
 
             if self.played_since_hint() == 1 : #si 1 personne a joué depuis l'indices   2)
