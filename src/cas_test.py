@@ -97,3 +97,13 @@ if ai.c_i(L4) == 5: print("test 10 ok <3 (discard la carte de plus haut nombre p
 else:
     print("test 10 not ok :(")
     print(ai.c_i(L4))
+
+print("Test clue ")
+hanabi.deck.other_players_cards = L + L2 + L3 + L4
+c = ai.clue()
+
+if c != 'cB2':
+    print("Test clue faux, on trouve:")
+    print(c)
+else:
+    print("Test clue réussi")

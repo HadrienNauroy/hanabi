@@ -414,8 +414,8 @@ class Strat1_ai(AI):
             return("c%d%d"%(self.other_players_cards[(indice)*(self.nb_cards)].number, (indice+1)))
         else:
             #On donne la couleur de la première carte du joueur numero (indice-4)
-            clue ="c%s%d" %(self.other_players_cards[(indice-4)*(self.nb_cards)].color ,(indice-3))  #C = Donner une couleur celle de la première carte à
-            #clue = clue[:2]+clue[-1]  quick fix, with 3+ players, can't clue cRed2 anymore, only cR2
+            clue ="c%s%d" %(self.other_players_cards[(indice-4)*(self.nb_cards)] ,(indice-3))  #C = Donner une couleur celle de la première carte à
+            clue = clue[:2]+clue[-1]  #quick fix, with 3+ players, can't clue cRed2 anymore, only cR2
             return(clue)
 
 
@@ -446,12 +446,14 @@ class Strat1_ai(AI):
             if self.played_since_hint() == 0 : #si personne n'a joué depuis l'indice  1)
                 self.actions=[game.current_hand.recommendation[0]] + self.actions  #maj de actions avant le return
                 self.dead_card += [ game.current_hand[game.current_hand.recommendation[0][1]-1]]
+                
                 return game.current_hand.recommendation[0]
 
             if self.played_since_hint() == 1 : #si 1 personne a joué depuis l'indices   2)
                 if self.game.red_coins<2:
                     self.actions=[game.current_hand.recommendation[0]] + self.actions  #maj de actions avant le return
                     self.dead_card += [ game.current_hand[game.current_hand.recommendation[0][1]-1]]
+
                     return game.current_hand.recommendation[0]
 
 
@@ -460,6 +462,7 @@ class Strat1_ai(AI):
             c=self.clue()         #give a clue
             self.actions = [c] + self.actions
             self.from_clue_to_play()     #met a jour les hands.recommendation
+
             return c
 
         if game.current_hand.recommendation[0][0] == 'd': #si la dernière recommendation est de defausser 4)
