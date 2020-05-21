@@ -5,7 +5,7 @@ import hanabi
 import matplotlib.pyplot as plt
 
 start_time = time.time()
-n=100
+n=1
 nb_players=5
 results=26*[0]
 
@@ -14,7 +14,7 @@ for k in range(n):
 	game=hanabi.Game(nb_players)
 	ai=hanabi.ai.Strat1_ai(game)
 	game.ai=ai
-	game.quiet=True
+	#game.quiet=True
 	game.run()
 	res=game.score
 	results[res]+=1
