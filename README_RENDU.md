@@ -60,9 +60,9 @@ Nous avons alors créé le tableau dans la fonction play
 
 Nous avons décidé d'utiliser TKinter pour réaliser l'interface graphique puisque c'est un module de base de python et qu'il n'y avait rien besoin de telecharger en plus.
 
-Nous avons décider d'utiliser les classes et d'utiliser une fonction par menu, ainsi chaque commande (chaque clic sur un bouton) lance une fonction qui remet à zero l'affichage de la fenêtre et ajoute ses propres élémennts. Cela permet de passer aisément d'un menu à l'autre et de toujours disposer de tous les boutons que l'on souhaite. En réalité je ne vois pas comment nous aurions pu nous passer des classes. 
+Nous avons décidé d'utiliser les classes et d'utiliser une fonction par menu, ainsi chaque commande (chaque clic sur un bouton) lance une fonction qui remet à zero l'affichage de la fenêtre et ajoute ses propres élémennts. Cela permet de passer aisément d'un menu à l'autre et de toujours disposer de tous les boutons que l'on souhaite. En réalité je ne vois pas comment nous aurions pu nous passer des classes. 
 
-Comme c'était la première fois que nous manipulions des interface graphique nous sommes allé au plus simple, ainsi le code est assez long et très redondant. Il serait possible de le factoriser en réduisant toutes les fonctions qui se ressemblent à l'appelle d'une fonction à paramètres : 
+Comme c'était la première fois que nous manipulions des interfaces graphiques nous sommes allés au plus simple, ainsi le code est assez long et très redondant. Il serait possible de le factoriser en réduisant toutes les fonctions qui se ressemblent à l'appelle d'une fonction à paramètres : 
 ```
 def play_1(self):
 	self.play(1)
@@ -75,11 +75,66 @@ Cette partie n'a pas été spécialement compliqué puisque, une fois le module 
 
 # Tests unitaires
 
+## Test c_i
+
+On initialise d'abord une simulation de partie:
+```
+ai=hanabi.ai.Strat1_ai(game)
+a=hanabi.deck.Card(Red,1)
+b=hanabi.deck.Card(Red,1)
+c=hanabi.deck.Card(Blue,4)
+d=hanabi.deck.Card(Yellow,2)
+e=hanabi.deck.Card(White,2)
+f=hanabi.deck.Card(White,2)
+g=hanabi.deck.Card(White,3)
+
+L=[a,b,c,d,e,f,g]
+game.discard_pile.cards=L
+```
+
+On construit les cas tests en fonction de la priorité des indices:
+* Jouer le 5 jouable de plus bas indice: on propose le cas test:
+```
+card1 = hanabi.deck.Card(Red, 5)
+card2 = hanabi.deck.Card(Yellow, 5)
+card3 = hanabi.deck.Card(Red, 2)
+card4 = hanabi.deck.Card(Blue, 5)
+L = [card1, card2, card3, card4]
+```
+Ici, les deux premiers 5 sont jouables, on cherche donc à vérifier que l'indice donné sera c_i(L) = 0 c'est à dire *play card 1* 
+
+* Jouer la carte de plus petit nombre jouable. A nombre égale, on prendra le plus petit indice
+
+```
+card6 = hanabi.deck.Card(Red, 4)
+card7 = hanabi.deck.Card(Yellow, 4)
+card8 = hanabi.deck.Card(Green, 3)
+card9 = hanabi.deck.Card(Blue, 1)
+L2 = [card6, card7, card8, card9]
+```
+Ici, on s'attend à ce que la fonction c_i retourne 3 c'est à dire *Play card 4*. Nous avons de même essayé avec deux carte 'B1' et en effet, c_i retourne bien l'indice le plus bas. 
+Ce cas test nous a permis de déceler deux erreurs que nous n'avions pas encore vu dans le code. 
+
+* Défausser la *dead_card* de plus petit indice
+
+Il suffit pour cela de ne mettre que des cartes injouables (indispensables ou non) et des *dead_card* dans notre liste test. 
+
+**Par exemple:** [B2,Y2,R2,B5]
+
+* Défausser la carte non indispensable de plus haut rang
+ Ici, il ne faut mettre que des cartes injouable et non *dead_card* 
+ **Par exemple :** [B2,W5,W4,B5]
+ Ce test a été fait avant de considérer que comme les deux W2 avaient été défaussées, W4 et W5 sont en fait *dead*
+ 
+ * Défausser c_1
+ Il suffit ici de ne mettre que des cartes consiérées comme indispensables.
+
 ## L'interface graphique
 
-Nous n'avons pas réaliser de test unitaires pour cette partie, nous nous sommes contenter de jouer avec l'interface et de verifier que celle-ci fonctionnait correctement. 
+Nous n'avons pas réalisé de test unitaires pour cette partie, nous nous sommes contenté de jouer avec l'interface et de verifier que celle-ci fonctionnait correctement. 
 
-Pour tester la fin de la partie et le menu de fin, nous avons créé un bouton supléméntaire "pop" qui perméttait de vider le deck manuellement et ainsi d'arriver à la fin de partie très rapidement.
+Pour tester la fin de la partie et le menu de fin, nous avons créé un bouton supléméntaire "pop" qui permettait de vider le deck manuellement et ainsi arriver à la fin de partie très rapidement.
+
 
 # Statistiques
 
