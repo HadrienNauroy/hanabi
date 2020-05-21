@@ -4,7 +4,7 @@ Nous avons fait le choix de nous intéresser au document sur le  [hat guessing](
 
 # Points techniques
 
-Pour simplifier la lecture du code et pour se repartir aisément le travail nous avons decider de fragmenter le plus possible le code en sous fonctions. La fonction `play`se réduit alors à quelques lignes qui appelent les autres fonctions.
+Pour simplifier la lecture du code et pour se repartir aisément le travail nous avons decider de fragmenter le plus possible le code en sous fonctions. La fonction `play`se réduit alors à quelques lignes qui appellent les autres fonctions.
 
 ## Hand.recommendation
 
@@ -55,6 +55,23 @@ Nous avons alors créé le tableau dans la fonction play
 * Lorsqu'une carte est défaussée on vérifie si elle était indispensable
   * Si elle l'était alors toutes les cartes de nombre supérieur sont ajoutées au tableau
   * Sinon rien ne se passe
+  
+## La fonction clue()
+
+La fonction renvoie l'indice à donner en regardant les cartes de touts les autres joueurs sous forme d'une chaine de caractère
+
+## La fonction from_clue_to_play()
+
+La fonction est lancée au moment où le joueur donne l'indice. Elle doit mettre à jour hand.recommendation pour tous les autres joueurs
+c'est-à-dire traduire l'indice pour chaque joueur.
+
+## La fonction played_since_hint()
+
+La fonction répond à la question : Une carte a-t-elle été joué depuis que l'on m'a donné un indice (current hand.recommendation)
+
+## La fonction play()
+La fonction qui "repond" au jeu selon l'algorithme de la classe.
+Après avoir joué on met a jour la liste actions et si besoin est on appelle from_clue_to_play
 
 ## L'interface graphique
 
@@ -73,6 +90,7 @@ def play_2(self):
 
 Cette partie n'a pas été spécialement compliqué puisque, une fois le module TKinter compris, il suffisait de faire dialoguer l'interface avec le jeu et comme nous avions déjà codé une partie de l'ai à ce stade du projet nous avions bien compris comment le fichier deck.py fonctionnait. 
 
+
 # Tests unitaires
 
 ## Test c_i
@@ -90,6 +108,12 @@ g=hanabi.deck.Card(White,3)
 
 L=[a,b,c,d,e,f,g]
 game.discard_pile.cards=L
+
+game.piles[Green]=2
+game.piles[Yellow]=4
+game.piles[White] = 1
+game.piles[Red]= 4
+game.piles[Blue] = 0
 ```
 
 On construit les cas tests en fonction de la priorité des indices:
@@ -129,11 +153,34 @@ Il suffit pour cela de ne mettre que des cartes injouables (indispensables ou no
  * Défausser c_1
  Il suffit ici de ne mettre que des cartes consiérées comme indispensables.
 
+## Test is_indispensable() et is_indispensable2()
+
+Les deux fonctions n'utilisent que le tableau de défausse. On considère alors la même liste de défausse que précédemment dans le cas test des c_i. Et on test ici trois cas:
+
+* **Cas indispensable** : la carte est la seule qui existe dans le deck et les cartes défaussées ne la rendent pas inutile. **Par exemple :** on a défaussé deux fois la carte 1 Rouge rendant la carte **1 Rouge indispensable**. On remarque que le cas test ne peut pas interférer avec l'assertion *dead_card* car si elle a été défaussée deux fois et jouée une fois elle ne peut plus être dans la main d'un joueur.
+```
+t1=hanabi.deck.Card(Red,1)
+if ai.is_indispensable2(t1) : print("test 1 OK")
+else: print("test 1 not OK ")
+```
+* **Cas non indispensable** : La carte a au moins un doublons dans le deck, elle peut donc être défaussée sans crainte. (Possibilité d'erreur dans le programme: Si deux personnes ont la même carte et que l'indice qui leur est donné est de défausser pour les deux, que l'un défausse cette carte, cette carte dans la main du deuxième joueur devient indispensable. Il ne peut donc pas défausser cette carte. La probabilité étant assez faible on ne comptera pas ce cas dans notre programme) **Par exemple:** Ici le 3 Jaune n'a jamais été défaussé au regard de la pile de défausse on peut donc affirmer qu'il est non indispensable. 
+
+* **Cas mort** : Le cas tel que les cartes défaussées rendent la carte inutile. Nous testons alors l'efficacité de notre fonction is_indispensable2 par rapport à la fonction is_indispensable. **Par exemple :** C'est ici le cas de la carte 5 Blanche. Le cas test est alors très simple:
+```
+t3=hanabi.deck.Card(White,5)
+if not(ai.is_indispensable2(t3)) and ai.is_indispensable(t3) : print("test 3 OK")
+else: print("test 6 not OK ")
+```
+
 ## L'interface graphique
 
 Nous n'avons pas réalisé de test unitaires pour cette partie, nous nous sommes contenté de jouer avec l'interface et de verifier que celle-ci fonctionnait correctement. 
+Et comme une image vaut mieux que mille mots...
+
 
 Pour tester la fin de la partie et le menu de fin, nous avons créé un bouton supléméntaire "pop" qui permettait de vider le deck manuellement et ainsi arriver à la fin de partie très rapidement.
+
+
 
 
 # Statistiques
@@ -143,3 +190,8 @@ Le fichier `get_data.py` permet de tester sur un grand nombre de parties l'éffi
 Le score moyen après 1000 parties est 24.8 et la répartition des scores est la suivante :
 
 ![resultats](/src/results.png)
+
+
+# Conclusion et perspectives
+
+Nous n'avons pas eu le temps de finir la liste de dead_card pour rendre le code plus clair et utilisable par des personnes extérieures. De plus nous pourrions changer la fonciton is_indispensable pour en faire une liste rendant encore une fois les choses plus claires et utilisables. Nous pourrions aussi traiter le cas où deux personnes sur la table reçoivent le même conseil de défausser une même carte qui devient alors indispensable.
