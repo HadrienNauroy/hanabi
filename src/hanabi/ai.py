@@ -445,13 +445,13 @@ class Strat1_ai(AI):
         if game.current_hand.recommendation[0][0] == 'p': #si la dernière recommendation est de jouer
             if self.played_since_hint() == 0 : #si personne n'a joué depuis l'indice  1)
                 self.actions=[game.current_hand.recommendation[0]] + self.actions  #maj de actions avant le return
-                #self.dead_card += [ game.current_hand[game.current_hand.recommendation[0][1]-1]]
+                self.dead_card += [ game.current_hand[game.current_hand.recommendation[0][1]-1]]
                 return game.current_hand.recommendation[0]
 
             if self.played_since_hint() == 1 : #si 1 personne a joué depuis l'indices   2)
                 if self.game.red_coins<2:
                     self.actions=[game.current_hand.recommendation[0]] + self.actions  #maj de actions avant le return
-                    #self.dead_card += [ game.current_hand[game.current_hand.recommendation[0][1]-1]]
+                    self.dead_card += [ game.current_hand[game.current_hand.recommendation[0][1]-1]]
                     return game.current_hand.recommendation[0]
 
 
@@ -464,12 +464,12 @@ class Strat1_ai(AI):
 
         if game.current_hand.recommendation[0][0] == 'd': #si la dernière recommendation est de defausser 4)
             actions = [game.current_hand.recommendation[0]] + actions
-            #card = game.current_hand[game.current_hand.recommendation[0][1]-1]
-            #if card.is_indispensable2 == True:
-                #for k in range(card.number,5):
-                    #carddead.number = k
-                    #carddead.color = card.color
-                    #self.dead_card += [carddead]
+            card = game.current_hand[game.current_hand.recommendation[0][1]-1]
+            if card.is_indispensable2 == True:
+                for k in range(card.number,5):
+                    carddead.number = k
+                    carddead.color = card.color
+                    self.dead_card += [carddead]
             return game.current_hand.recommendation[0]
 
         self.actions = ["d1"] + self.actions  # 5)
