@@ -351,10 +351,12 @@ class Strat1_ai(AI):
         for k in range(len(L)):
             if L[k].number <= self.game.piles[L[k].color]: #or (self.is_indispensable2(L[k])==False and self.is_indispensable(L[k])==True):
                 return(4+k)
+            if not(is_indispensable2(L[k])) and is_indispensable(L[k]) :
+                return(4+k)
 
 
         #on discard la carte de plus haut numéro de plus petit indice et non indispensable
-        m, l = 0 , len(L)+1 #FIXME : j 'ai rien compris à celui la
+        m, l = 0 , len(L)+1
         for k in range(len(L)):
             if L[k].number > m and self.is_indispensable2(L[k]) == False:  #si on a une carte plus grande non indispensable
                                                                        #la condition indice plus grand est implicite avec la boucle
@@ -410,7 +412,7 @@ class Strat1_ai(AI):
 
 
     def clue(self):
-        '''la fonction renvoie l'indice à donner sous forme de chaine de carctère'''
+        '''la fonction renvoie l'indice à donner sous forme de chaine de caractère'''
         g_1 = 0
         I_see = self.other_players_cards
 
@@ -437,7 +439,7 @@ class Strat1_ai(AI):
 
 
     def played_since_hint(self):
-        '''la fonction répond à la question : Une carte à-t-elle été joué depuis que l'on m'a donné un indice (current hand.recommendation)'''
+        '''la fonction répond à la question : Une carte a-t-elle été joué depuis que l'on m'a donné un indice (current hand.recommendation)'''
         if self.actions == [] :
             raise liste_vide(" actions list is empty ")
 
