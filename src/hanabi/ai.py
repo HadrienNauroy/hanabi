@@ -344,7 +344,7 @@ class Strat1_ai(AI):
         for k in range(len(L)):
             if L[k].number <= self.game.piles[L[k].color]:
                 return(4+k)
-            if not(is_indispensable2(L[k])) and is_indispensable(L[k]) :
+            if not(self.is_indispensable2(L[k])) and self.is_indispensable(L[k]) :
                 return(4+k)
 
         #on discard la carte de plus haut numéro de plus petit indice et non indispensable

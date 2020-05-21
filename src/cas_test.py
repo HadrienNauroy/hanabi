@@ -100,3 +100,5 @@ if c != 'c32':
     print(c)
 else:
     print("Test clue réussi")
+
+print("Test from_clue_to_play")
