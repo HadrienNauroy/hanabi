@@ -4,8 +4,18 @@ Nous avons fais le choix de nous intéresser au document sur le  [hat guessing](
 
 # Points techniques
 
+Pour simplifier la lecture du code et pour se repartir aisément le travail nous avons decider de fragmenter le plus possible le code en sous fonctions. La fonction `play`se réduit alors à quelques lignes qui appelent les autres fonctions.
+
+## Hand.recommentation
+
+La stratégie de hat guessing que l'on a retenu necessite que chaque joueur retienne la derrnière recommendation qui lui a été donné plus que l'indice puisque ce dernier ne correspond à rien. Nous avons donc ajouté un élément à la classe `Hand` : l'argument `hand.recomendation` qui contient la dernière recommendation. 
+
+## Actions
+
+La strategie que nous avons retenu necessite aussi que les joueurs se souviennent des actions précédentes pour modeliser ce souvenir nous avons créer une variable de classe dans `Strat1.ai` appelée `actions` et qui n'est rien d'autre qu'une liste contenant toutes les actions efféctuées par les joueurs. Il était inutile de démultiplier cette information et de la placer dans les différentes mains des joueurs, la variable de classe paraissait alors adaptée à la situation et s'apparente à un savoir collectif.
+
 ## La fonction c_i
-Dans ce document, nous trouvons que pour optimiser le code il vaudrait mieux créer une fonction que nous nommons c_i.
+Un des éléments important de la stratégie de recommendation est de déterminer le coefficient ci donné à chanque mains. Nous avons décidé de créer une fonction dédier à ce calcul. Nous l'avons simplement nommé `c_i`.
 
 La fonction c_i permet d'attribuer un chiffre modulo 8 à une main correspondant à la recommendation qui lui est donnée.
 Elle prend en argument la main d'un joueur sous forme de liste de card
@@ -20,18 +30,19 @@ additionnant les c_i des autres joueurs (sauf celui du donneur d'indice)
 
 ## Fonction ou tableau is_indispensable
 
-Cette fonction suit les règles du hat guessing décrites dans le document mais nous demande de créer un élément nous disant si une carte étudiée est indispensable ou non. Il faut alors que nous décidions la forme de cet élément. Soit un tableau qui serait au fur et à mesure du jeu réactualisé, soit une fonction qui prendrait en argument la carte et le statut du jeu et renverrait un booléen. On a alors choisi la fonction car elle nous semblait alors plus facile à coder et à utiliser. 
+Pour le calcul de ci il faut être capable de déterminer si une carte est indispensable. Nous avons alors créer une fonction `is_indispensable` qui détermine si une carte est indispensable ou non. 
 
-Plus tard nous nous rendons compte que la fonction que nous avons codé ,qui était extrêmement simple, ne prenait pas en compte toutes les possibilités. En effet, la fonction considérait par exemple que le 5 d'une couleur serait d'office indispensable. Or ce n'est pas le cas puisqu'en effet, si les deux 4 ou les deux 3 de la même couleurs avaient déjà été défaussés, le 5 ne serait alors pas indispensable, il serait même inutile.
+Plus tard nous nous sommes rendu compte que la fonction que nous avions codé ,qui était extrêmement simple, ne prenait pas en compte toutes les possibilités. En effet, la fonction considérait par exemple que le 5 d'une couleur serait d'office indispensable. Or ce n'est pas le cas puisqu'en effet, si les deux 4 ou les deux 3 de la même couleurs avaient déjà été défaussés, le 5 ne serait alors pas indispensable, il serait même inutile.
 
-Dans un premier temps nous avons donc crée une nouvelle fonction is_indispensable2 en prenant en compte tous les cas de défausse.
+Dans un premier temps nous avons donc créé une nouvelle fonction `is_indispensable2` en prenant en compte tous les cas de défausse.
 
-Plus tard, nous réfléchissons sur l'optimalité de l'algorithme. On se rend compte que la carte 5 de l'exemple précédent étant inutile, il faudrait la compter comme une *dead_card*. Ce changement a un impact sur le code puisque dans la priorité des indices, défausser une *dead_card* est plus important que de défausser une carte qui est non *is_indispensable*. Nous vient alors à l'esprit deux façons de faire
+Plus tard, en réfléchiqqant sur l'optimalité de l'algorithme nous nous sommes rendu compte que la carte 5 de l'exemple précédent étant inutile, il faudrait alors la compter comme une *dead_card*. Ce changement a un impact sur le code puisque dans la priorité des indices, défausser une *dead_card* est plus important que de défausser une carte qui est non *is_indispensable*. Nous avons alors mis en évidence deux façons de proceder.
+
 ### Utiliser les fonctions déjà écrites 
 
-Nous remarquons que la fonction is_indispensable2 nous donnera **False** pour les *dead_card* et les non *is_indispensable* et **True** pour les *is_indispensable* pendant que la fonction is_indispensable nous donnera par définition **False** pour les non *is_indispensable* et **True** pour les *is_indispensable*. Ainsi une *dead_card* sera alors simplement définie par une card telle que ```is_indispensable(self, card) == True and is_indispensable2(self,card) == False```. 
+Nous avons remarqué que la fonction is_indispensable2 nous donnait **False** pour les *dead_card* et les non *is_indispensable* et **True** pour les *is_indispensable* pendant que la fonction is_indispensable nous donnait par définition **False** pour les non *is_indispensable* et **True** pour les *is_indispensable*. Ainsi une *dead_card* sera alors simplement définie par une card telle que ```is_indispensable(self, card) == True and is_indispensable2(self,card) == False```. 
 
-Ainsi, nous aurions une définition d'une dead_card assez simple. Mais nous remarquons que cette façon de faire n'est pas très explicite ou pratique pour une personne qui reprendrait notre code plus tard. 
+Ainsi, nous avions une définition d'une dead_card assez simple. Mais nous avons remarqué que cette façon de faire n'était pas très explicite ou pratique pour une personne qui reprendrait notre code plus tard. 
 
 ### Créer un tableau de dead_card
 
@@ -39,7 +50,7 @@ Une *dead_card* étant définie par:
 * Soit cette carte a déjà été jouée sur le plateau auquel cas elle ne servira plus
 * Soit cette carte est injouable car un nombre suffisant de cartes de la même couleur et d'un nombre inférieur a été défaussé.
 
-Nous créons alors le tableau dans la fonction play
+Nous avons alors créé le tableau dans la fonction play
 * Lorsqu'une carte est (bien) jouée on l'ajoute dans le tableau 
 * Lorsqu'une carte est défaussée on vérifie si elle était indispensable
   * Si elle l'était alors toutes les cartes de nombre supérieur sont ajoutées au tableau
@@ -77,4 +88,3 @@ Le fichier `get_data.py` permet de tester sur un grand nombre de parties l'éffi
 Le score moyen après 1000 parties est 24.8 et la répartition des scores est la suivante :
 
 ![resultats](/src/results.png)
-Format: ![Alt Text](url) 
