@@ -351,7 +351,7 @@ class Strat1_ai(AI):
         for k in range(len(L)):
             if L[k].number <= self.game.piles[L[k].color]: #or (self.is_indispensable2(L[k])==False and self.is_indispensable(L[k])==True):
                 return(4+k)
-            if not(is_indispensable2(L[k])) and is_indispensable(L[k]) :
+            if not(self.is_indispensable2(L[k])) and self.is_indispensable(L[k]) :
                 return(4+k)
 
 
@@ -397,11 +397,14 @@ class Strat1_ai(AI):
                     L = self.other_hands[i].cards
                     g_p += self.c_i(L)
                     print('g_p = ' ,g_p)
+                    print('k,i = ',k,i)
                 for i in range(k+1, self.nb_players-1):
                     L = self.other_hands[i].cards
                     g_p += self.c_i(L)
                     print('g_p = ' ,g_p)
+                    print('k,j = ',k,i)
                 c_p = (g_1-g_p)%8
+                print('cp=',c_p)
                 #maintenant on le transforme en chaine de charactères
                 if c_p <= 3:
                     self.other_hands[k].recommendation = ["p%d"%(c_p+1)] + self.other_hands[k].recommendation
