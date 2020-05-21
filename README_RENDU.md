@@ -176,6 +176,13 @@ else: print("test 6 not OK ")
 
 Nous n'avons pas réalisé de test unitaires pour cette partie, nous nous sommes contenté de jouer avec l'interface et de verifier que celle-ci fonctionnait correctement. 
 Et comme une image vaut mieux que mille mots...
+![bienvenue](bienvenue.png)
+![](play_advanced.png)
+![](clue.png)
+![](piles.png)
+![](discard.png)
+![](play.png)
+
 
 
 Pour tester la fin de la partie et le menu de fin, nous avons créé un bouton supléméntaire "pop" qui permettait de vider le deck manuellement et ainsi arriver à la fin de partie très rapidement.
