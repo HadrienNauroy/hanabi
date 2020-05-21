@@ -196,7 +196,7 @@ Le fichier `get_data.py` permet de tester sur un grand nombre de parties l'éffi
 
 Le score moyen après 1000 parties est 24.8 et la répartition des scores est la suivante :
 
-![resultats](/src/results.png)
+![resultats](resultat.png)
 
 
 # Conclusion et perspectives
