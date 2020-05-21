@@ -23,6 +23,13 @@ class AI:
         # return sum([x.cards for x in self.other_hands], [])
         return list(itertools.chain.from_iterable([hand.cards for hand in self.other_hands]))
 
+dico_color={}
+dico_color[31]='Red'
+dico_color[34]='Blue'
+dico_color[32]='Green'
+dico_color[37]='White'
+dico_color[33]='Yellow'
+   
 
 class Cheater(AI):
     """
@@ -342,10 +349,11 @@ class Strat1_ai(AI):
 
         #si y'a une dead card (déjà jouée), on a discard celle de plus petit indice
         for k in range(len(L)):
-            if L[k].number <= self.game.piles[L[k].color]:
+            if L[k].number <= self.game.piles[L[k].color]: #or (self.is_indispensable2(L[k])==False and self.is_indispensable(L[k])==True):
                 return(4+k)
             if not(self.is_indispensable2(L[k])) and self.is_indispensable(L[k]) :
                 return(4+k)
+
 
         #on discard la carte de plus haut numéro de plus petit indice et non indispensable
         m, l = 0 , len(L)+1
@@ -388,10 +396,15 @@ class Strat1_ai(AI):
                 for i in range(0,k):
                     L = self.other_hands[i].cards
                     g_p += self.c_i(L)
+                    print('g_p = ' ,g_p)
+                    print('k,i = ',k,i)
                 for i in range(k+1, self.nb_players-1):
                     L = self.other_hands[i].cards
                     g_p += self.c_i(L)
+                    print('g_p = ' ,g_p)
+                    print('k,j = ',k,i)
                 c_p = (g_1-g_p)%8
+                print('cp=',c_p)
                 #maintenant on le transforme en chaine de charactères
                 if c_p <= 3:
                     self.other_hands[k].recommendation = ["p%d"%(c_p+1)] + self.other_hands[k].recommendation
@@ -409,15 +422,20 @@ class Strat1_ai(AI):
         #pour chaque joueur
         for k in range(self.nb_players-1):
             L=self.other_hands[k].cards
-            g_1+= self.c_i(L) #on calcul ci
+            g_1+= self.c_i(L)
+            #print('g_i=',g_1)
+            #print('gi= ',g_1 ) #on calcul ci
         indice = g_1%8
-
+        #print('modulo',indice)
+        #print(indice)
         if indice<4:
             #On donne comme indice la valeur de la première carte du joueur numero (indice)
-            return("c%d%d"%(self.other_players_cards[(indice)*(self.nb_cards)].number, (indice+1)))
+            return("c%d%d"%(self.other_hands[indice].cards[0].number, (indice+1)))
         else:
             #On donne la couleur de la première carte du joueur numero (indice-4)
-            clue ="c%s%d" %(self.other_players_cards[(indice-4)*(self.nb_cards)].color ,(indice-3))  #C = Donner une couleur celle de la première carte à
+            #color=dico_color[self.other_hands[indice-4].cards[0].color]
+            #print('test', self.other_hands[indice-4].cards[0].color)
+            clue ="c%s%d" %(self.other_hands[indice-4].cards[0].color ,(indice-3))  #C = Donner une couleur celle de la première carte à
             clue = clue[:2]+clue[-1]  #quick fix, with 3+ players, can't clue cRed2 anymore, only cR2
             #print('clue', clue)
             return(clue)
@@ -480,6 +498,7 @@ class Strat1_ai(AI):
             print('actions',game.current_hand.recommendation[0])
             return game.current_hand.recommendation[0]
 
+        print('recomentation : ',game.current_hand.recommendation[0], '\n blue coin', game.blue_coins)
         self.actions = ["d1"] + self.actions  # 5)
         print('actions',"d1")
         return "d1"
