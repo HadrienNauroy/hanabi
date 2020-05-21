@@ -2,7 +2,6 @@
 
 Nous avons fais le choix de nous intéresser au document sur le  [hat guessing](https://d0474d97-a-62cb3a1a-s-sites.googlegroups.com/site/rmgpgrwc/research-papers/Hanabi_final.pdf?attachauth=ANoY7coMzpFRtLM4k0xQFM5uHV6_UW4qjYf5C8FRXvHy0NDu8d82FC8cK7Up3O2EhV64LSXjWuFUPUBg5NqQdXyli6nmdMelkYIhgqJlN1v8Gt94H9BJjQmYpiJSPaVfueaxEeqdr70QNzejFypRwhcEw3EGT2FcH0E4WnmQ-LL49xHzV-DIL_O1kCZ12Dq2KIrjElFK-RgkRR1qoM20dsjxFYIweSsDmIlBAMvAX2kAntIKHMHfddk%3D&attredirects=0). Le document étant extrêmement bien fait nous décidons de coder pas à pas la stratégie de recommendation. 
 
-
 # Points techniques
 
 ## La fonction c_i
@@ -45,3 +44,37 @@ Nous créons alors le tableau dans la fonction play
 * Lorsqu'une carte est défaussée on vérifie si elle était indispensable
   * Si elle l'était alors toutes les cartes de nombre supérieur sont ajoutées au tableau
   * Sinon rien ne se passe
+
+## L'interface graphique
+
+Nous avons décidé d'utiliser TKinter pour réaliser l'interface graphique puisque c'est un module de base de python et qu'il n'y avait rien besoin de telecharger en plus.
+
+Nous avons décider d'utiliser les classes pour et d'utiliser une fonction par menu, ainsi chaque commande (chaque clic sur un bouton) lance une fonction qui remet à zero l'affichage de la fenêtre et ajoute ses propres élémennts. Cela permet de passer aisément d'un menu à l'autre et de toujours disposer de tous les boutons que l'on souhaite. En réalité je ne vois pas comment nous aurions pu nous passer des classes. 
+
+Comme c'était la première fois que nous manipulions des interface graphique nous sommes allé au plus simple, ainsi le code est assez long et très redondant. Il serait possible de le factoriser en réduisant toutes les fonctions qui se ressemblent à l'appelle d'une fonction à paramètres : 
+```
+def play_1(self):
+	self.play(1)
+
+def play_2(self):
+	self.play(2)
+```
+
+Cette partie n'a pas été spécialement compliqué puisque, une fois le module TKinter compris, il suffisait de faire dialoguer l'interface avec le jeu et comme nous avions déjà codé une partie de l'ai à ce stade du projet nous avions bien compris comment le fichier deck.py fonctionnait. 
+
+# Tests unitaires
+
+## L'interface graphique
+
+Nous n'avons pas réaliser de test unitaires pour cette partie, nous nous sommes contenter de jouer avec l'interface et de verifier que celle-ci fonctionnait correctement. 
+
+Pour tester la fin de la partie et le menu de fin, nous avons créé un bouton supléméntaire "pop" qui perméttait de vider le deck manuellement et ainsi d'arriver à la fin de partie très rapidement.
+
+# Statistiques
+
+Le fichier `get_data.py` permet de tester sur un grand nombre de parties l'éfficaciter de l'ai que nous avons codé. Il lance 1000 parties calcul la moyenne et résume les résultats dans un histograme. 
+
+Le score moyen après 1000 parties est 24.8 et la répartition des scores est la suivante :
+
+![resultats](/src/results.png)
+Format: ![Alt Text](url) 
