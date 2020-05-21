@@ -33,8 +33,8 @@ if ai.is_indispensable2(t1) : print("test 1 OK")
 else: print("test 1 not OK ")
 if not(ai.is_indispensable2(t2)) : print("test 2 OK")
 else: print("test 2 not OK ")
-if not(ai.is_indispensable2(t6)) : print("test 6 OK")
-else: print("test 6 not OK ")
+if not(ai.is_indispensable2(t3)) : print("test 3 OK")
+else: print("test 3 not OK ")
 
 "cas test de c_i"
 
@@ -187,7 +187,7 @@ ai.game.hands[2].recommendation=[]
 ai.game.hands[3].recommendation=[]
 ai.game.hands[4].recommendation=[]
 
-if ai.clue()=='c51' : print('test E OK')
+if ai.clue()=='c31' : print('test E OK')
 else : print('test E not OK', ai.clue())
 
 
