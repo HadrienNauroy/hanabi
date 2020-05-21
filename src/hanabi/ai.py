@@ -382,7 +382,7 @@ class Strat1_ai(AI):
             #On explicite g_1 on repasse d'une chaine de charactères à un chiffre entre 0 et 7
             #Si on a donné un numéro c'est que g_1 est entre 0 et 3
 
-            if c[1] in ['1','2','3','4']:
+            if c[1] in ['1','2','3','4','5']:
                 g_1 = int(c[2]) -1
             #Si on a donné une lettre alors g_1 est entre 4 et 7
             else:
@@ -396,15 +396,15 @@ class Strat1_ai(AI):
                 for i in range(0,k):
                     L = self.other_hands[i].cards
                     g_p += self.c_i(L)
-                    print('g_p = ' ,g_p)
-                    print('k,i = ',k,i)
+                    #print('g_p = ' ,g_p)
+                    #print('k,i = ',k,i)
                 for i in range(k+1, self.nb_players-1):
                     L = self.other_hands[i].cards
                     g_p += self.c_i(L)
-                    print('g_p = ' ,g_p)
-                    print('k,j = ',k,i)
+                    #print('g_p = ' ,g_p)
+                    #print('k,j = ',k,i)
                 c_p = (g_1-g_p)%8
-                print('cp=',c_p)
+                #print('cp=',c_p)
                 #maintenant on le transforme en chaine de charactères
                 if c_p <= 3:
                     self.other_hands[k].recommendation = ["p%d"%(c_p+1)] + self.other_hands[k].recommendation
@@ -468,14 +468,14 @@ class Strat1_ai(AI):
             if self.played_since_hint() == 0 : #si personne n'a joué depuis l'indice  1)
                 self.actions=[game.current_hand.recommendation[0]] + self.actions  #maj de actions avant le return
                 #self.dead_card += [ game.current_hand[game.current_hand.recommendation[0][1]-1]]
-                print('actions',game.current_hand.recommendation[0])
+                #print('actions',game.current_hand.recommendation[0])
                 return game.current_hand.recommendation[0]
 
             if self.played_since_hint() == 1 : #si 1 personne a joué depuis l'indices   2)
                 if self.game.red_coins<2:
                     self.actions=[game.current_hand.recommendation[0]] + self.actions  #maj de actions avant le return
                     #self.dead_card += [ game.current_hand[game.current_hand.recommendation[0][1]-1]]
-                    print('actions',game.current_hand.recommendation[0])
+                    #print('actions',game.current_hand.recommendation[0])
                     return game.current_hand.recommendation[0]
 
 
@@ -484,7 +484,7 @@ class Strat1_ai(AI):
             c=self.clue()         #give a clue
             self.actions = [c] + self.actions
             self.from_clue_to_play()     #met a jour les hands.recommendation
-            print('actions',c)
+            #print('actions',c)
             return c
 
         if game.current_hand.recommendation[0][0] == 'd': #si la dernière recommendation est de defausser 4)
@@ -495,10 +495,10 @@ class Strat1_ai(AI):
                     #carddead.number = k
                     #carddead.color = card.color
                     #self.dead_card += [carddead]
-            print('actions',game.current_hand.recommendation[0])
+            #print('actions',game.current_hand.recommendation[0])
             return game.current_hand.recommendation[0]
 
-        print('recomentation : ',game.current_hand.recommendation[0], '\n blue coin', game.blue_coins)
+        #print('recomentation : ',game.current_hand.recommendation[0], '\n blue coin', game.blue_coins)
         self.actions = ["d1"] + self.actions  # 5)
-        print('actions',"d1")
+        #print('actions',"d1")
         return "d1"
