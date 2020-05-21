@@ -97,3 +97,5 @@ if ai.c_i(L4) == 5: print("test 10 ok <3 (discard la carte de plus haut nombre p
 else:
     print("test 10 not ok :(")
     print(ai.c_i(L4))
+
+ai.other_hands[1].cards=[]
