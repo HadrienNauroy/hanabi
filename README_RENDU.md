@@ -194,11 +194,14 @@ Pour tester la fin de la partie et le menu de fin, nous avons créé un bouton s
 
 Le fichier `get_data.py` permet de tester sur un grand nombre de parties l'éfficaciter de l'ai que nous avons codé. Il lance 1000 parties calcul la moyenne et résume les résultats dans un histograme. 
 
-Le score moyen après 1000 parties est 24.8 et la répartition des scores est la suivante :
+Le score moyen après 1000 parties est 22.24 et la répartition des scores est la suivante :
 
-![resultats](resultat.png)
+![resultats](result.png)
 
 
 # Conclusion et perspectives
 
-Nous n'avons pas eu le temps de finir la liste de dead_card pour rendre le code plus clair et utilisable par des personnes extérieures. De plus nous pourrions changer la fonciton is_indispensable pour en faire une liste rendant encore une fois les choses plus claires et utilisables. Nous pourrions aussi traiter le cas où deux personnes sur la table reçoivent le même conseil de défausser une même carte qui devient alors indispensable.
+Finalement notre score est équivalent à celui de l'article, les quelques détails que nous pourrions changer ne devraient pas tellement influencer l'allure globale de notre courbe. En revanche ils pourraient peut-être améliorer l'efficacité et la lisibilité du code.
+Nous n'avons pas eu le temps de finir la liste de dead_card pour rendre le code plus clair et utilisable par des personnes extérieures. De plus nous pourrions changer la fonciton is_indispensable pour en faire une liste rendant encore une fois les choses plus claires et utilisables. Nous pourrions aussi traiter le cas où deux personnes sur la table reçoivent le même conseil de défausser une même carte qui devient alors indispensable. 
+
+Il serait aussi extrêmement intéressant d'essayer de coder les règles implicites du véritable jeu. 
