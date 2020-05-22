@@ -5,7 +5,7 @@ import hanabi
 import matplotlib.pyplot as plt
 
 start_time = time.time()
-n=100
+n=1000
 nb_players=5
 results=26*[0]
 
@@ -32,4 +32,3 @@ plt.bar(target,results)
 plt.xlabel('score')
 plt.ylabel('frequence')
 plt.show()
-
