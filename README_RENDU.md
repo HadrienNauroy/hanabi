@@ -58,12 +58,12 @@ Nous avons alors créé le tableau dans la fonction play
   
 ## La fonction clue()
 
-La fonction renvoie l'indice à donner en regardant les cartes de touts les autres joueurs sous forme d'une chaine de caractère
+La fonction renvoie l'indice à donner en regardant les cartes de touts les autres joueurs sous forme d'une chaine de caractère. Elle est presque exclusivement composée d'une boucle qui appelle la fonctio `c_i`.
 
 ## La fonction from_clue_to_play()
 
 La fonction est lancée au moment où le joueur donne l'indice. Elle doit mettre à jour hand.recommendation pour tous les autres joueurs
-c'est-à-dire traduire l'indice pour chaque joueur.
+c'est-à-dire traduire l'indice pour chaque joueur. Elle utilise également la fonction`c_i`.
 
 ## La fonction played_since_hint()
 
@@ -198,6 +198,8 @@ Le score moyen après 1000 parties est 22.26 et la répartition des scores est l
 
 ![resultats](resultfin.png)
 
+On obtient des résultats satisfaisants : l'ai ne fait pas encore le score parfait à toutes les parties mais elle ne fait jamais en dessous de 15. Pour l'instant elle est bien meilleur que nous au jeu. 
+Pour améliorer ce score on pourrait utiliser la deuxième stratégie de l'article : la stratégie d'information. Une bonne partie de notre code serait alors réutilisable.
 
 # Conclusion et perspectives
 
