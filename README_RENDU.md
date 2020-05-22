@@ -58,12 +58,12 @@ Nous avons alors créé le tableau dans la fonction play
   
 ## La fonction clue()
 
-La fonction renvoie l'indice à donner en regardant les cartes de touts les autres joueurs sous forme d'une chaine de caractère
+La fonction renvoie l'indice à donner en regardant les cartes de touts les autres joueurs sous forme d'une chaine de caractère. Elle est presque exclusivement composée d'une boucle qui appelle la fonctio `c_i`.
 
 ## La fonction from_clue_to_play()
 
 La fonction est lancée au moment où le joueur donne l'indice. Elle doit mettre à jour hand.recommendation pour tous les autres joueurs
-c'est-à-dire traduire l'indice pour chaque joueur.
+c'est-à-dire traduire l'indice pour chaque joueur. Elle utilise également la fonction`c_i`.
 
 ## La fonction played_since_hint()
 
@@ -192,13 +192,18 @@ Pour tester la fin de la partie et le menu de fin, nous avons créé un bouton s
 
 # Statistiques
 
-Le fichier `get_data.py` permet de tester sur un grand nombre de parties l'éfficaciter de l'ai que nous avons codé. Il lance 1000 parties calcul la moyenne et résume les résultats dans un histograme. 
+Le fichier `get_data.py` permet de tester sur un grand nombre de parties l'efficacité de l'ai que nous avons codé. Il lance 1000 parties calcul la moyenne et résume les résultats dans un histograme. 
 
-Le score moyen après 1000 parties est 24.8 et la répartition des scores est la suivante :
+Le score moyen après 1000 parties est 22.26 et la répartition des scores est la suivante :
 
-![resultats](resultat.png)
+![resultats](resultfin.png)
 
+On obtient des résultats satisfaisants : l'ai ne fait pas encore le score parfait à toutes les parties mais elle ne fait jamais en dessous de 15. Pour l'instant elle est bien meilleur que nous au jeu. 
+Pour améliorer ce score on pourrait utiliser la deuxième stratégie de l'article : la stratégie d'information. Une bonne partie de notre code serait alors réutilisable.
 
 # Conclusion et perspectives
 
-Nous n'avons pas eu le temps de finir la liste de dead_card pour rendre le code plus clair et utilisable par des personnes extérieures. De plus nous pourrions changer la fonciton is_indispensable pour en faire une liste rendant encore une fois les choses plus claires et utilisables. Nous pourrions aussi traiter le cas où deux personnes sur la table reçoivent le même conseil de défausser une même carte qui devient alors indispensable.
+Finalement notre score est équivalent à celui de l'article, les quelques détails que nous pourrions changer ne devraient pas tellement influencer l'allure globale de notre courbe. En revanche ils pourraient peut-être améliorer l'efficacité et la lisibilité du code.
+Nous n'avons pas eu le temps de finir la liste de dead_card pour rendre le code plus clair et utilisable par des personnes extérieures. De plus nous pourrions changer la fonciton is_indispensable pour en faire une liste rendant encore une fois les choses plus claires et utilisables. Nous pourrions aussi traiter le cas où deux personnes sur la table reçoivent le même conseil de défausser une même carte qui devient alors indispensable. 
+
+Il serait aussi extrêmement intéressant d'essayer de coder les règles implicites du véritable jeu. 
